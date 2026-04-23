@@ -251,6 +251,12 @@
 
 <div class="section-head" id="chapters">
   <h2 data-num="I">The Chapters</h2>
+  <div class="tools">
+    <div class="search-wrap">
+      <input class="search" id="search" placeholder="Search 700 questions…" autocomplete="off"/>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
 </div>
 
 <div class="grid" id="chapterGrid"></div>
@@ -343,7 +349,7 @@ FP.QUIZ_META.forEach((q, idx) => {
       <span class="ch-num">CH. ${toRoman(idx+1)} · ${String(q.id).padStart(2,'0')}</span>
       <span class="ch-status ${status}">${statusTxt}</span>
     </div>
-    <h3>${q.label}</h3>
+    <h3>${q.id===0?'<em>Online Dumps</em>':q.label}</h3>
     <div class="ch-sub">${q.sub}</div>
     <div class="ch-foot">
       <div class="ch-score ${attempted?'':'none'}">${attempted ? 'Best <span class="pct">' + pct + '%</span> · ' + s.attempts + ' attempt' + (s.attempts===1?'':'s') : 'Not yet opened'}</div>
