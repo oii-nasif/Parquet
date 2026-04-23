@@ -134,14 +134,14 @@
 
   /* Exams Grid */
   .exams-section {
-    padding: 40px 0 80px;
+    padding: 20px 0 80px;
   }
 
   .exams-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-top: 32px;
+    margin-top: 24px;
   }
 
   .exam-card {
@@ -229,6 +229,11 @@
     border-radius: 2px;
     display: inline-block;
     margin-bottom: 8px;
+  }
+
+  .exam-badge.interactive {
+    background: var(--accent);
+    color: var(--paper);
   }
 
   .exam-link {
@@ -334,6 +339,7 @@
     <!-- DP-700 -->
     <a href="landing-page-dp-700.html" class="exam-card dp-700">
       <span class="exam-code">DP-700</span>
+      <span class="exam-badge interactive">Interactive Quizzes</span>
       <h2 class="exam-title">Fabric Data Engineer Associate</h2>
       <p class="exam-desc">
         Implementing Data Engineering Solutions using Microsoft Fabric — Lakehouse, Delta, pipelines, Spark, Dataflows, and real-time.
@@ -342,7 +348,7 @@
         <span class="exam-meta-item">700 to pass</span>
         <span class="exam-meta-item">100 minutes</span>
       </div>
-      <span class="exam-link"><span>Open study guide</span><span>→</span></span>
+      <span class="exam-link"><span>Start practicing</span><span>→</span></span>
     </a>
 
     <!-- DP-800 -->
