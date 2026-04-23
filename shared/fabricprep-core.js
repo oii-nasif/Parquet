@@ -6,7 +6,7 @@
   const QUIZ_COUNT = 14;
 
   const QUIZ_META = [
-    { id: 0,  label: 'Online Dumps',   sub: 'Original exam pool',   href: 'quiz.html?q=0'  },
+    { id: 0,  label: 'Online Dumps',   sub: 'Practice questions',   href: 'quiz.html?q=0'  },
     { id: 1,  label: 'Foundations I',  sub: 'Workspaces & items',   href: 'quiz.html?q=1'  },
     { id: 2,  label: 'Foundations II', sub: 'Lakehouse & Delta',    href: 'quiz.html?q=2'  },
     { id: 3,  label: 'Ingestion I',    sub: 'Pipelines & gateways', href: 'quiz.html?q=3'  },
