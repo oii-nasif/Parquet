@@ -1,5 +1,7 @@
 # Parquet — Microsoft Fabric Study Guides
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
 Free study companions for Microsoft Fabric certifications.
 
 ## What's Available
@@ -29,7 +31,7 @@ Contributions are welcome! Please see **[CONTRIBUTING.md](CONTRIBUTING.md)** for
 
 ## License
 
-This project is open source and available for free.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
