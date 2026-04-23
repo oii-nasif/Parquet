@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>DP-600 Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141414;
+    --ink-2:#2a2a2a;
+    --mute:#6b6b66;
+    --line:#d9d6ce;
+    --line-2:#e8e5dc;
+    --paper:#faf8f2;
+    --paper-2:#f3efe4;
+    --accent:oklch(0.48 0.13 265);   /* DP-600 · indigo */
+    --accent-2:oklch(0.55 0.13 45);  /* burnt ochre */
+    --warn:oklch(0.55 0.15 25);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e6e2d6;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    font-size:9.5pt;
+    line-height:1.5;
+    font-feature-settings:"ss01","cv11","tnum";
+  }
+
+  .page{
+    width:8.5in;
+    height:11in;
+    background:var(--paper);
+    margin:24px auto;
+    padding:0.55in 0.7in 0.5in 0.7in;
+    position:relative;
+    box-shadow:0 4px 28px rgba(0,0,0,.12);
+    page-break-after:always;
+    break-after:page;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .page:last-child{page-break-after:auto; break-after:auto;}
+  .page-body{flex:1;}
+
+  .runhead{
+    position:absolute;
+    top:0.3in;
+    left:0.75in;
+    right:0.75in;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+    text-transform:uppercase;
+  }
+  .runhead .brand{color:var(--ink);font-weight:600;}
+  .runfoot{
+    position:absolute;
+    bottom:0.3in;
+    left:0.75in;
+    right:0.75in;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+  }
+  .runfoot .rule{flex:1;border-top:1px solid var(--line);margin:7px 14px 0;}
+
+  h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:8.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    font-weight:500;
+  }
+  p{margin:0 0 0.45em;}
+  .serif{font-family:'Newsreader',serif;}
+  em.q{font-family:'Newsreader',serif;font-style:italic;color:var(--ink-2);}
+
+  ul{margin:0.2em 0 0.5em 0; padding:0; list-style:none;}
+  ul li{
+    position:relative;
+    padding-left:16px;
+    margin:0.22em 0;
+  }
+  ul li::before{
+    content:"";
+    position:absolute;
+    left:0; top:0.55em;
+    width:6px; height:1px;
+    background:var(--ink);
+  }
+
+  code, .mono{font-family:'JetBrains Mono',monospace; font-size:0.92em;}
+  code{background:var(--paper-2); padding:1px 5px; border-radius:2px; color:var(--ink);}
+
+  .cover{padding:0;}
+  .cover .inner{
+    padding:0.7in 0.7in 0.5in;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .cover .mark{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .cover .mark .dot{
+    width:10px;height:10px;background:var(--ink);display:inline-block;
+  }
+  .cover h1.title{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:72pt;
+    line-height:0.92;
+    letter-spacing:-0.025em;
+    margin-top:40px;
+  }
+  .cover h1.title .num{font-style:italic;color:var(--accent);}
+  .cover .subtitle{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:20pt;
+    line-height:1.25;
+    color:var(--ink-2);
+    margin-top:22px;
+    max-width:6in;
+    font-weight:400;
+  }
+  .cover .lede{
+    margin-top:32px;
+    font-size:10.5pt;
+    max-width:5.2in;
+    color:var(--ink-2);
+    line-height:1.6;
+  }
+  .cover .meta-grid{
+    margin-top:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--ink);
+    padding-top:16px;
+  }
+  .cover .meta-grid .cell{
+    display:flex;flex-direction:column;gap:6px;
+    padding-right:16px;
+  }
+  .cover .meta-grid .k{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .cover .meta-grid .v{font-size:12pt; font-weight:500;}
+  .cover .meta-grid .v small{font-weight:400; color:var(--mute); font-size:9pt;}
+
+  .doc-h1{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:26pt;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin:4px 0 12px;
+  }
+  .doc-h2{
+    font-size:12pt;
+    font-weight:600;
+    margin:14px 0 5px;
+    letter-spacing:-0.01em;
+  }
+  .doc-h3{
+    font-size:9.5pt;
+    font-weight:600;
+    margin:12px 0 4px;
+    letter-spacing:0.01em;
+  }
+  .section-rule{
+    border-top:1px solid var(--ink);
+    margin:0 0 14px;
+    padding-top:8px;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .section-rule .idx{color:var(--ink);font-weight:600;}
+
+  .toc{display:grid; grid-template-columns:1fr; gap:0; margin-top:8px;}
+  .toc .row{
+    display:grid;
+    grid-template-columns:48px 1fr auto;
+    align-items:baseline;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    gap:14px;
+  }
+  .toc .row:first-child{border-top:1px solid var(--line);}
+  .toc .no{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    letter-spacing:0.06em;
+  }
+  .toc .ttl{
+    font-family:'Newsreader',serif;
+    font-size:14pt;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+  .toc .ttl .sub{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-size:9.5pt;
+    color:var(--mute);
+    font-weight:400;
+    letter-spacing:0;
+    margin-top:2px;
+  }
+  .toc .pg{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10pt;
+    color:var(--ink);
+  }
+
+  .callout{
+    margin:12px 0;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    background:var(--paper-2);
+    position:relative;
+  }
+  .callout .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .callout.alert .tag{color:var(--warn);}
+  .callout.tip .tag{color:var(--accent-2);}
+  .callout p:last-child{margin-bottom:0;}
+
+  .scenarios{
+    margin:10px 0 8px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:6px 0;
+  }
+  .scenarios .row{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:16px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--line);
+  }
+  .scenarios .row:last-child{border-bottom:none;}
+  .scenarios .if{
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--mute);
+    padding-top:3px;
+    min-width:28px;
+  }
+  .scenarios .then{font-size:9.25pt; line-height:1.45;}
+  .scenarios .then b{font-weight:600;color:var(--accent);}
+
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0 10px;
+    font-size:8.75pt;
+  }
+  table.data th,
+  table.data td{
+    text-align:left;
+    padding:7px 10px 7px 0;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+    line-height:1.35;
+  }
+  table.data thead th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    font-weight:600;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--ink);
+  }
+  table.data tbody tr:last-child td{border-bottom:1px solid var(--ink);}
+  .badge{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:2px 6px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    color:var(--ink-2);
+  }
+  .badge.ok{border-color:oklch(0.7 0.1 145); color:oklch(0.45 0.12 145);}
+  .badge.no{border-color:oklch(0.7 0.12 25); color:oklch(0.48 0.14 25);}
+  .badge.mid{border-color:oklch(0.75 0.1 85); color:oklch(0.48 0.12 65);}
+
+  .pit{
+    display:grid;
+    grid-template-columns:28px 1fr;
+    gap:10px;
+    padding:6px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .pit:first-of-type{border-top:1px solid var(--ink);}
+  .pit .n{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    padding-top:2px;
+  }
+  .pit .claim{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:10pt;
+    line-height:1.3;
+    color:var(--ink-2);
+    margin-bottom:2px;
+  }
+  .pit .claim::before{content:"“";}
+  .pit .claim::after{content:"”";}
+  .pit .verdict{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--warn);
+    font-weight:600;
+    margin-right:6px;
+  }
+  .pit .truth{font-size:9pt;}
+
+  .check-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+    border-top:1px solid var(--ink);
+  }
+  .check-item{
+    display:grid;
+    grid-template-columns:22px 28px 1fr;
+    gap:10px;
+    align-items:start;
+    padding:6px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .check-item .box{
+    width:14px;height:14px;
+    border:1.5px solid var(--ink);
+    margin-top:2px;
+  }
+  .check-item .n{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    padding-top:2px;
+  }
+  .check-item .t{font-size:9pt; line-height:1.4;}
+
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  .three{display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px;}
+
+  .weight-bar{
+    display:flex;
+    height:10px;
+    border:1px solid var(--ink);
+    margin:8px 0 4px;
+  }
+  .weight-bar span{display:block;}
+  .weight-bar .a{background:var(--accent);}
+  .weight-bar .b{background:var(--ink);}
+  .weight-bar .c{background:var(--accent-2);}
+  .weight-bar .d{background:var(--mute);}
+  .weight-legend{
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+    text-transform:uppercase;
+  }
+
+  .closer{
+    display:flex; flex-direction:column; justify-content:center;
+    align-items:flex-start;
+    flex:1;
+    padding-top:40px;
+  }
+  .closer .big{
+    font-family:'Newsreader',serif;
+    font-weight:400;
+    font-size:44pt;
+    line-height:0.98;
+    letter-spacing:-0.02em;
+    max-width:6in;
+  }
+  .closer .big em{color:var(--accent);font-style:italic;}
+  .closer .sign{
+    margin-top:60px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  @media print{
+    html,body{background:white;}
+    .page{margin:0; box-shadow:none;}
+  }
+
+  .print-bar{
+    position:fixed; top:16px; right:16px; z-index:99;
+    background:var(--ink); color:var(--paper);
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt; letter-spacing:0.12em; text-transform:uppercase;
+    padding:10px 16px; border:none; cursor:pointer;
+  }
+  @media print{.print-bar{display:none;}}
+</style>
+</head>
+<body>
+
+<button class="print-bar" onclick="window.print()">Print / Save PDF</button>
+
+<!-- =================== COVER =================== -->
+<section class="page cover">
+  <div class="inner page-body">
+    <div class="mark"><span class="dot"></span> Microsoft Certified · Fabric Analytics Engineer Associate</div>
+
+    <h1 class="title">Exam <span class="num">DP‑600</span><br/>Study Guide</h1>
+
+    <div class="subtitle">Implementing Analytics Solutions Using Microsoft Fabric — Lakehouse, Warehouse, Semantic Models, DAX, T‑SQL and PySpark.</div>
+
+    <p class="lede">A consolidated, scenario‑first reference organized around the four official exam domains. Every topic is paired with the decisions, trade‑offs, and distractors you will actually encounter on the exam.</p>
+
+    <div style="margin-top:40px;">
+      <div class="eyebrow" style="margin-bottom:10px;">Domain weighting</div>
+      <div class="weight-bar" aria-hidden="true">
+        <span class="d" style="width:12.5%"></span>
+        <span class="a" style="width:42.5%"></span>
+        <span class="b" style="width:22.5%"></span>
+        <span class="c" style="width:22.5%"></span>
+      </div>
+      <div class="weight-legend">
+        <span>Plan · 10–15%</span>
+        <span>Prepare &amp; Serve · 40–45%</span>
+        <span>Semantic Models · 20–25%</span>
+        <span>Explore · 20–25%</span>
+      </div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="cell"><span class="k">Exam code</span><span class="v">DP‑600</span></div>
+      <div class="cell"><span class="k">Duration</span><span class="v">100 min <small>/ 120 seat</small></span></div>
+      <div class="cell"><span class="k">Questions</span><span class="v">40 – 60</span></div>
+      <div class="cell"><span class="k">Passing score</span><span class="v">700 / 1000</span></div>
+    </div>
+  </div>
+  <div class="runfoot">
+    <span>Fabric Analytics Engineer Associate</span>
+    <span class="rule"></span>
+    <span>01 / 16</span>
+  </div>
+</section>
+
+<!-- =================== PAGE 2 · TOC =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · Study Guide</span><span>Table of Contents</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">00</span><span>Contents</span></div>
+    <h1 class="doc-h1">What's inside.</h1>
+    <p style="max-width:5.2in; color:var(--ink-2); margin-bottom:22px;">Eight chapters covering the exam blueprint, deep topic notes for all four domains, comparison tables, the traps the exam likes to set, and a twenty‑item pre‑exam checklist.</p>
+
+    <div class="toc">
+      <div class="row"><span class="no">01</span>
+        <span class="ttl">Exam Domains &amp; Weightage
+          <span class="sub">Blueprint, audience profile, and what the exam tests.</span>
+        </span>
+        <span class="pg">p. 03</span></div>
+      <div class="row"><span class="no">02</span>
+        <span class="ttl">Domain 1 — Plan, Implement &amp; Manage
+          <span class="sub">Workspace architecture, lifecycle, governance, security.</span>
+        </span>
+        <span class="pg">p. 04</span></div>
+      <div class="row"><span class="no">03</span>
+        <span class="ttl">Domain 2 — Prepare &amp; Serve Data
+          <span class="sub">Lakehouse, Warehouse, ingestion, transformation, medallion.</span>
+        </span>
+        <span class="pg">p. 06</span></div>
+      <div class="row"><span class="no">04</span>
+        <span class="ttl">Domain 3 — Semantic Models
+          <span class="sub">Star schema, DirectLake, DAX, incremental refresh, XMLA.</span>
+        </span>
+        <span class="pg">p. 09</span></div>
+      <div class="row"><span class="no">05</span>
+        <span class="ttl">Domain 4 — Explore &amp; Analyze
+          <span class="sub">SQL endpoints, notebooks, profiling, Copilot, perf queries.</span>
+        </span>
+        <span class="pg">p. 11</span></div>
+      <div class="row"><span class="no">06</span>
+        <span class="ttl">Service Comparison Tables
+          <span class="sub">Stores, storage modes, languages, tools.</span>
+        </span>
+        <span class="pg">p. 13</span></div>
+      <div class="row"><span class="no">07</span>
+        <span class="ttl">Common Pitfalls &amp; Distractors
+          <span class="sub">Twelve plausible‑but‑wrong answers the exam loves.</span>
+        </span>
+        <span class="pg">p. 14</span></div>
+      <div class="row"><span class="no">08</span>
+        <span class="ttl">Final Checklist — 20 Must‑Knows
+          <span class="sub">Night‑before review list.</span>
+        </span>
+        <span class="pg">p. 15</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>DP‑600</span><span class="rule"></span><span>02 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 3 · DOMAINS =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 01</span><span>Exam Domains</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">01</span><span>Official Exam Domains &amp; Weightage</span></div>
+    <h1 class="doc-h1">The blueprint.</h1>
+
+    <p style="max-width:5.4in; color:var(--ink-2);">The DP‑600 exam validates your ability to design, build, and deploy enterprise‑scale analytics solutions in Microsoft Fabric — spanning Lakehouse, Warehouse, semantic models, DAX, T‑SQL, and PySpark. It sits between data engineering and BI: you are the person who turns raw data into reusable, trusted analytics assets.</p>
+
+    <h2 class="doc-h2">Audience profile</h2>
+    <ul>
+      <li>Analytics engineer bridging the data engineering and BI worlds — transforms raw data into reusable, trusted analytics assets.</li>
+      <li>Responsibilities: designing and building scalable data models, cleansing + transforming data, enabling performant analytic experiences.</li>
+      <li>Partners with solution architects, data engineers, DBAs, analysts, and administrators across the analytics lifecycle.</li>
+      <li>Skilled at <b>SQL</b>, <b>DAX</b>, and <b>PySpark</b>, plus semantic modeling and Power BI report design.</li>
+    </ul>
+
+    <h2 class="doc-h2">Weighting</h2>
+    <table class="data" style="table-layout:fixed; white-space:nowrap;">
+      <colgroup><col style="width:58%"/><col style="width:14%"/><col style="width:28%"/></colgroup>
+      <thead><tr><th>Domain</th><th>Weight</th><th>Focus</th></tr></thead>
+      <tbody>
+        <tr><td style="font-size:8.25pt;"><b>01 &nbsp; Plan, Implement &amp; Manage a Solution</b></td><td class="n">10–15%</td><td style="font-size:8.25pt;">Workspaces, lifecycle, security</td></tr>
+        <tr><td style="font-size:8.25pt;"><b>02 &nbsp; Prepare &amp; Serve Data</b></td><td class="n">40–45%</td><td style="font-size:8.25pt;">Lakehouse, Warehouse, ingest</td></tr>
+        <tr><td style="font-size:8.25pt;"><b>03 &nbsp; Implement &amp; Manage Semantic Models</b></td><td class="n">20–25%</td><td style="font-size:8.25pt;">Star schema, DirectLake, DAX</td></tr>
+        <tr><td style="font-size:8.25pt;"><b>04 &nbsp; Explore &amp; Analyze Data</b></td><td class="n">20–25%</td><td style="font-size:8.25pt;">SQL endpoints, profiling</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p><b>Prepare &amp; Serve Data</b> is by far the largest domain — roughly four in ten questions. Spend the most prep time on Lakehouse vs. Warehouse choice, Delta table maintenance, Dataflow Gen2, notebooks, and medallion architecture. Breadth is the challenge: the exam spans data‑engineer skills (Spark, Lakehouse) and BI skills (DAX, semantic models).</p>
+    </div>
+
+    <h2 class="doc-h2">Format at a glance</h2>
+    <div class="three">
+      <div>
+        <div class="eyebrow">Platforms</div>
+        <p style="margin-top:4px;">Fabric · OneLake · Lakehouse · Warehouse · Power BI</p>
+      </div>
+      <div>
+        <div class="eyebrow">Question types</div>
+        <p style="margin-top:4px;">Multiple choice · Drag‑and‑drop · Case studies</p>
+      </div>
+      <div>
+        <div class="eyebrow">Languages</div>
+        <p style="margin-top:4px;">SQL · DAX · PySpark · Power Query (M)</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>01 · Domains</span><span class="rule"></span><span>03 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 4 · DOMAIN 1 A =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 02</span><span>Domain 1 · Plan &amp; Manage</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">02</span><span>Domain 1 · 10 – 15%</span></div>
+    <h1 class="doc-h1">Plan, implement &amp; manage the <em class="q">solution.</em></h1>
+
+    <h2 class="doc-h2">2.1 &nbsp; Plan a data analytics environment</h2>
+    <ul>
+      <li><b>Capacity requirements.</b> Size Fabric capacity (F‑SKU) by concurrent workloads; capacity is shared across workspaces. Watch CU seconds, smoothing, and throttling.</li>
+      <li><b>Domains &amp; workspace strategy.</b> Group workspaces by business area using <b>domains</b>; domain admins govern discoverability and defaults independently of tenant admins.</li>
+      <li><b>Data gateway.</b> On‑premises data gateway for private sources; VNet data gateway for Azure private endpoints.</li>
+      <li><b>Recommend Fabric items.</b> Lakehouse for unified files+tables, Warehouse for T‑SQL, Semantic model for BI, Dataflow/Pipeline for ingest.</li>
+    </ul>
+
+    <h2 class="doc-h2">2.2 &nbsp; Implement &amp; manage an analytics environment</h2>
+    <ul>
+      <li><b>Security &amp; governance.</b> Workspace roles (Admin, Member, Contributor, Viewer); item‑level share; row‑, column‑, object‑, and file‑level security; Purview sensitivity labels.</li>
+      <li><b>Workspace settings.</b> Git integration, default lakehouse, Spark environment, managed private endpoints, spark auto‑scale.</li>
+      <li><b>Lifecycle management.</b> Git integration (Azure DevOps / GitHub), deployment pipelines with <b>deployment rules</b> for dev → test → prod.</li>
+      <li><b>Version control for data models.</b> Database projects + source‑controlled semantic model TMDL; PBIP project format for Power BI.</li>
+    </ul>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p>Know the division of labor between <b>Git integration</b> (source control, diffing, PRs) and <b>deployment pipelines</b> (stage promotion with rules). They are complementary — Git tracks change, pipelines promote it.</p>
+    </div>
+
+    <h2 class="doc-h2">2.3 &nbsp; Security &amp; access model</h2>
+    <table class="data">
+      <thead><tr><th style="width:24%">Requirement</th><th>Feature</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Isolate tenants by row</td><td>Row‑Level Security (RLS)</td><td>Security predicate; applies in Warehouse, Lakehouse SQL endpoint, and semantic models.</td></tr>
+        <tr><td>Hide sensitive columns</td><td>Column / Object‑Level Security</td><td><code>DENY SELECT</code> on specific columns.</td></tr>
+        <tr><td>Mask PII at presentation</td><td>Dynamic Data Masking</td><td>Not encryption — DBAs still see real data.</td></tr>
+        <tr><td>Restrict folders in OneLake</td><td>OneLake file/folder ACLs</td><td>Enforced across every engine reading the path.</td></tr>
+        <tr><td>Protect downstream exports</td><td>Sensitivity labels (Purview)</td><td>Labels flow to PBIX, Excel, shared reports.</td></tr>
+        <tr><td>Signal trust</td><td>Endorsements</td><td>Promoted (author) or Certified (admin) — not a security control.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="runfoot"><span>02 · Domain 1</span><span class="rule"></span><span>04 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 5 · DOMAIN 1 B · lifecycle card =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 02</span><span>Lifecycle &amp; deployment</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">02 · card</span><span>Lifecycle card · Git + deployment pipelines</span></div>
+    <h1 class="doc-h1">From notebook to <em class="q">production.</em></h1>
+
+    <!-- Lifecycle strip -->
+    <div style="border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); padding:16px 0; margin:8px 0 16px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px;">
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 01</div>
+          <div style="font-weight:600; margin-top:4px;">Develop</div>
+          <div style="font-size:9pt; color:var(--mute); line-height:1.35;">Author lakehouses, warehouses, semantic models in a <b>dev workspace</b>.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 02</div>
+          <div style="font-weight:600; margin-top:4px;">Source control</div>
+          <div style="font-size:9pt; color:var(--mute); line-height:1.35;">Workspace bound to Git branch; commit notebooks, TMDL, PBIP.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 03</div>
+          <div style="font-weight:600; margin-top:4px;">Promote</div>
+          <div style="font-size:9pt; color:var(--mute); line-height:1.35;">Deployment pipeline pushes items dev → test → prod with rules.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 04</div>
+          <div style="font-weight:600; margin-top:4px;">Operate</div>
+          <div style="font-size:9pt; color:var(--mute); line-height:1.35;">Monitor Hub, Capacity Metrics app, refresh health, usage metrics.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="doc-h2" style="margin-top:0;">Fabric items an analytics engineer touches</h2>
+    <table class="data">
+      <thead><tr><th style="width:22%">Item</th><th>Primary purpose</th><th>Owner‑persona</th></tr></thead>
+      <tbody>
+        <tr><td><b>Lakehouse</b></td><td>Files + Delta tables over OneLake.</td><td>Data engineer + analytics eng.</td></tr>
+        <tr><td><b>Warehouse</b></td><td>T‑SQL DW with multi‑table transactions.</td><td>Analytics engineer</td></tr>
+        <tr><td><b>SQL endpoint</b></td><td>Read‑only T‑SQL over a Lakehouse.</td><td>Analyst / analytics eng.</td></tr>
+        <tr><td><b>Semantic model</b></td><td>Star‑schema model for Power BI.</td><td>Analytics engineer</td></tr>
+        <tr><td><b>Notebook</b></td><td>PySpark / SparkSQL transformations.</td><td>Analytics eng. / DE</td></tr>
+        <tr><td><b>Dataflow Gen2</b></td><td>Low‑code Power Query ingest + shape.</td><td>Analyst</td></tr>
+        <tr><td><b>Data pipeline</b></td><td>Orchestration with copy, notebook, dataflow.</td><td>Analytics eng. / DE</td></tr>
+        <tr><td><b>Power BI report</b></td><td>Visual explore &amp; distribute.</td><td>Analyst</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <div class="tag">Mental model</div>
+      <p>Analytics engineer's job = turn Lakehouse/Warehouse tables into a <b>reusable semantic model</b> with clean names, clear relationships, and performant DAX. Everything on this page supports that goal.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>02 · Domain 1</span><span class="rule"></span><span>05 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 6 · DOMAIN 2 A · Lakehouse vs Warehouse =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 03</span><span>Domain 2 · Prepare &amp; Serve</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03</span><span>Domain 2 · 40 – 45%  (largest domain)</span></div>
+    <h1 class="doc-h1">Prepare &amp; serve <em class="q">data.</em></h1>
+
+    <h2 class="doc-h2">3.1 &nbsp; Lakehouse vs. Warehouse — the central decision</h2>
+    <table class="data">
+      <thead><tr><th>Aspect</th><th>Lakehouse</th><th>Warehouse</th></tr></thead>
+      <tbody>
+        <tr><td>Storage</td><td>Delta Parquet (files + tables)</td><td>Delta (managed T‑SQL)</td></tr>
+        <tr><td>Primary language</td><td>Spark SQL / PySpark</td><td>T‑SQL</td></tr>
+        <tr><td>Multi‑table txn</td><td><span class="badge no">no</span></td><td><span class="badge ok">yes</span></td></tr>
+        <tr><td>Unstructured data</td><td><span class="badge ok">yes</span> (Files area)</td><td><span class="badge no">no</span></td></tr>
+        <tr><td>DML via SQL endpoint</td><td><span class="badge no">read‑only</span></td><td><span class="badge ok">full</span></td></tr>
+        <tr><td>Shortcuts in</td><td><span class="badge ok">yes</span></td><td>Via OneLake</td></tr>
+        <tr><td>Best fit</td><td>Medallion ELT, ML, raw &amp; curated data</td><td>Star‑schema DW, serve semantic model</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">3.2 &nbsp; Medallion architecture</h2>
+    <ul>
+      <li><b>Bronze.</b> Raw landing — append‑only copies of source data. Minimal transforms; schema close to source.</li>
+      <li><b>Silver.</b> Cleansed, conformed, deduplicated, type‑corrected. SCDs applied. Still normalized.</li>
+      <li><b>Gold.</b> Business‑ready, aggregated, star‑schema. Source for semantic models.</li>
+      <li><b>Implementation.</b> Layers can be separate lakehouses, separate schemas in one lakehouse, or distributed across Lakehouse (bronze/silver) + Warehouse (gold).</li>
+    </ul>
+
+    <h2 class="doc-h2">3.3 &nbsp; Create objects in a Lakehouse or Warehouse</h2>
+    <ul>
+      <li><b>Ingest.</b> Pipeline Copy activity, Dataflow Gen2, notebook <code>spark.read</code>, Shortcut, Mirroring.</li>
+      <li><b>Shortcuts.</b> Virtualize external data — ADLS, S3, GCS, Dataverse, other OneLake items. Zero copy; changes at source visible immediately.</li>
+      <li><b>Mirroring.</b> Near‑real‑time read‑only replica of Azure SQL DB, Cosmos DB, Snowflake into OneLake as Delta.</li>
+      <li><b>External tables.</b> In Warehouse / Lakehouse to reference Parquet/CSV without load.</li>
+      <li><b>Implement dynamic rules and partitioning.</b> Partition Delta tables by a low‑cardinality column (e.g. <code>EventDate</code>). Never partition by high‑cardinality keys — it creates tiny files.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">you need multi‑table transactions for gold layer → land gold in a <b>Warehouse</b>.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">you need to analyze ADLS files without copying → <b>Shortcut</b> into Lakehouse.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">you need a live read of Azure SQL with minimal ETL → <b>Mirroring</b>.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">a team wants low‑code ETL with Power Query → <b>Dataflow Gen2</b>.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>06 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 7 · Domain 2 B · ingest + transform =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 03</span><span>Ingest &amp; transform</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03 · cont.</span><span>Ingest, transform, copy, merge</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">3.4 &nbsp; Copy &amp; transform data</h2>
+    <ul>
+      <li><b>Copy activity.</b> Move data between 100+ connectors with schema mapping, staging, fault tolerance. Best for scheduled batch.</li>
+      <li><b>Dataflow Gen2.</b> Low‑code Power Query (M) — best for analysts and simple shape‑and‑enrich.</li>
+      <li><b>Notebook (PySpark / Spark SQL).</b> Code‑first, best for large joins, complex logic, reuse via functions.</li>
+      <li><b>T‑SQL inside Warehouse.</b> Set‑based <code>INSERT … SELECT</code>, <code>MERGE</code>, stored procedures.</li>
+      <li><b>Full, incremental, or streaming.</b> Use a watermark column (<code>LastModified</code>) for incremental; use CDC / Change Tracking when available.</li>
+    </ul>
+
+    <h2 class="doc-h2">3.5 &nbsp; Handle SCDs, duplicates, late data</h2>
+    <ul>
+      <li><b>SCD Type 1.</b> Overwrite current value. <code>MERGE … WHEN MATCHED UPDATE</code>.</li>
+      <li><b>SCD Type 2.</b> Keep history with <code>EffectiveFrom</code>, <code>EffectiveTo</code>, <code>IsCurrent</code>. Close prior row; insert new.</li>
+      <li><b>Deduplicate.</b> <code>ROW_NUMBER() OVER (PARTITION BY natural_key ORDER BY ts DESC)</code>, keep rn = 1.</li>
+      <li><b>Missing values.</b> <code>COALESCE</code> defaults, or quarantine nulls.</li>
+      <li><b>Late facts.</b> Insert placeholder dim row; update when dim arrives.</li>
+    </ul>
+
+    <h2 class="doc-h2">Dedup + incremental — quick forms</h2>
+    <div class="two">
+      <div>
+        <h3 class="doc-h3">Deduplicate on natural key</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        SELECT * FROM (<br/>
+        &nbsp;&nbsp;SELECT *, ROW_NUMBER() OVER<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;(PARTITION BY CustomerId<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp; ORDER BY UpdatedAt DESC) rn<br/>
+        &nbsp;&nbsp;FROM stg.Customer<br/>
+        ) t WHERE rn = 1;
+        </p>
+      </div>
+      <div>
+        <h3 class="doc-h3">Incremental watermark load</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        -- pipeline expression<br/>
+        @{activity('LookupWM').output.firstRow.LastLoad}<br/><br/>
+        SELECT * FROM src.Orders<br/>
+        WHERE ModifiedDate &gt; @prevWatermark;
+        </p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="tag">Pro tip</div>
+      <p>When the exam asks "which tool for this transformation?" read for persona clues: <b>analyst + UI</b> → Dataflow Gen2 (M); <b>large joins / ML</b> → Notebook (PySpark); <b>multi‑table transaction</b> → Warehouse (T‑SQL).</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>07 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 8 · Domain 2 C · Delta maintenance =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 03</span><span>Delta maintenance &amp; optimization</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03 · cont.</span><span>Delta maintenance &amp; performance</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">3.6 &nbsp; Optimize Lakehouse / Warehouse performance</h2>
+    <ul>
+      <li><b>V‑Order.</b> Write‑time Delta Parquet optimization for Fabric engines. On by default. Keep it on for tables read by Power BI DirectLake or SQL endpoint.</li>
+      <li><b>OPTIMIZE.</b> Compacts small files (common from streaming writes) into larger ones → less metadata, fewer IOs.</li>
+      <li><b>Z‑ORDER.</b> Co‑locates rows within files on chosen columns → better data skipping on highly‑filtered queries.</li>
+      <li><b>VACUUM.</b> Removes obsolete files past retention (default 7 days). Reduces storage.</li>
+      <li><b>Partitioning.</b> Low‑cardinality only (<code>EventDate</code>). High‑cardinality partitioning creates the small‑file problem.</li>
+      <li><b>Warehouse.</b> Statistics (auto), result‑set caching, star‑schema design, avoid <code>SELECT *</code>, minimize data movement across distributions.</li>
+    </ul>
+
+    <h2 class="doc-h2">Decide: which maintenance op?</h2>
+    <table class="data">
+      <thead><tr><th style="width:22%">Symptom</th><th>Remedy</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Many tiny files from streaming</td><td><code>OPTIMIZE</code></td><td>Compacts into larger Parquet files.</td></tr>
+        <tr><td>Slow filter on one column</td><td><code>Z‑ORDER BY col</code></td><td>Co‑locates matching rows.</td></tr>
+        <tr><td>Storage bill growing</td><td><code>VACUUM</code></td><td>Removes files past retention.</td></tr>
+        <tr><td>Slow read in Power BI DirectLake</td><td>Keep <b>V‑Order</b> on</td><td>Optimized layout for Vertipaq.</td></tr>
+        <tr><td>Query does full scan on a date filter</td><td>Partition on <code>date_col</code></td><td>Partition pruning.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">3.7 &nbsp; Denormalize for gold + serve</h2>
+    <ul>
+      <li><b>Conformed dimensions.</b> Share Date / Customer / Product across fact tables.</li>
+      <li><b>Surrogate keys.</b> Integer keys — fact joins stay fast.</li>
+      <li><b>Pre‑aggregate carefully.</b> If many reports roll up by month, materialize a monthly summary; keep the grain aligned with the finest question.</li>
+      <li><b>Naming.</b> Business‑friendly column names; hide surrogate keys in the semantic model.</li>
+    </ul>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p><b>OPTIMIZE ≠ VACUUM.</b> OPTIMIZE compacts small files; VACUUM removes obsolete files after retention. The exam tests you on picking the right one for the stated symptom.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>08 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 9 · Domain 3 A · semantic model =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 04</span><span>Domain 3 · Semantic Models</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">04</span><span>Domain 3 · 20 – 25%</span></div>
+    <h1 class="doc-h1">Design &amp; manage <em class="q">semantic models.</em></h1>
+
+    <h2 class="doc-h2">4.1 &nbsp; Design &amp; build semantic models</h2>
+    <ul>
+      <li><b>Star schema.</b> One fact per grain, conformed dims. Bi‑directional relationships only when strictly required.</li>
+      <li><b>Relationships.</b> One‑to‑many, single direction. Inactive relationships for role‑playing dims activated via <code>USERELATIONSHIP</code>.</li>
+      <li><b>Role‑playing dimensions.</b> One <code>Date</code> dim referenced by <code>OrderDate</code>, <code>ShipDate</code> via multiple (inactive) relationships.</li>
+      <li><b>Calculation groups.</b> Reusable time‑intelligence patterns (YTD, PY, MoM) applied across measures.</li>
+      <li><b>Hierarchies &amp; display folders.</b> Group measures and columns for consumer navigation.</li>
+      <li><b>Large semantic models.</b> Enable large format + XMLA endpoint read/write. Partitions for incremental refresh.</li>
+    </ul>
+
+    <h2 class="doc-h2">4.2 &nbsp; Storage modes — Import vs. DirectQuery vs. DirectLake</h2>
+    <table class="data">
+      <thead><tr><th>Mode</th><th>How it works</th><th>Best for</th><th>Trade‑off</th></tr></thead>
+      <tbody>
+        <tr><td><b>Import</b></td><td>Data loaded into VertiPaq (in‑memory).</td><td>Fast reports; complex DAX.</td><td>Needs refresh; memory‑bound.</td></tr>
+        <tr><td><b>DirectQuery</b></td><td>Every visual issues a query to source.</td><td>Live data; very large models.</td><td>Slower; pushes load to source.</td></tr>
+        <tr><td><b>DirectLake</b></td><td>Reads Delta directly from OneLake into VertiPaq on demand.</td><td>Fabric‑native; no refresh; near‑Import speed.</td><td>Fabric Lakehouse/Warehouse only; falls back to DirectQuery if rules violated.</td></tr>
+        <tr><td><b>Composite</b></td><td>Mix: Import fact + DQ dim, dual tables.</td><td>Hybrid scenarios.</td><td>Relationship limits; complexity.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">4.3 &nbsp; DirectLake — know the rules</h2>
+    <ul>
+      <li>Source must be a <b>Fabric Lakehouse or Warehouse Delta table</b> (V‑Order recommended).</li>
+      <li>No calculated columns, no calculated tables, no composite models on the DirectLake model.</li>
+      <li>If a query exceeds resource guardrails or uses unsupported features, the engine <b>falls back to DirectQuery</b> over the SQL endpoint.</li>
+      <li>Schema refresh picks up column changes; <code>framing</code> refreshes the view of Delta for the model.</li>
+    </ul>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p>When the scenario mentions <b>huge volumes + always‑current + Fabric source</b>, the right answer is usually <b>DirectLake</b>. But if calculated columns or non‑Fabric sources are required, it must be Import or DirectQuery.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>04 · Domain 3</span><span class="rule"></span><span>09 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 10 · Domain 3 B · DAX + refresh =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 04</span><span>DAX, refresh, deploy</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">04 · cont.</span><span>DAX optimization &amp; model operations</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">4.4 &nbsp; DAX essentials the exam tests</h2>
+    <ul>
+      <li><b>Measures vs. calculated columns.</b> Prefer measures. Calculated columns materialize at refresh and inflate model size; not allowed on DirectLake.</li>
+      <li><b>CALCULATE.</b> The heart of DAX — modifies filter context. Pair with <code>FILTER</code>, <code>ALL</code>, <code>KEEPFILTERS</code>, <code>REMOVEFILTERS</code>.</li>
+      <li><b>Time intelligence.</b> <code>DATEADD</code>, <code>SAMEPERIODLASTYEAR</code>, <code>TOTALYTD</code>, <code>DATESBETWEEN</code>. Require a marked <b>Date</b> table with contiguous dates.</li>
+      <li><b>Iterators.</b> <code>SUMX</code>, <code>AVERAGEX</code> — evaluate expression per row; avoid on huge tables when a plain <code>SUM</code> would do.</li>
+      <li><b>Variables.</b> <code>VAR</code> + <code>RETURN</code> — evaluate once, reuse, improve readability and performance.</li>
+      <li><b>Context transition.</b> <code>CALCULATE</code> converts row context to filter context; know this for iterator questions.</li>
+    </ul>
+
+    <h2 class="doc-h2">4.5 &nbsp; Partitioning, incremental refresh, XMLA</h2>
+    <ul>
+      <li><b>Incremental refresh.</b> Define <code>RangeStart</code> / <code>RangeEnd</code> parameters; set policy for storing N years + refreshing M days. Power BI auto‑partitions.</li>
+      <li><b>Detect changes.</b> Optional column to skip unchanged partitions.</li>
+      <li><b>XMLA endpoint.</b> Read/write on Premium/Fabric. Connect SSMS, Tabular Editor, ALM Toolkit for enterprise scripting.</li>
+      <li><b>Deploy via pipelines.</b> Promote semantic models dev → test → prod; use deployment rules for data source bindings.</li>
+    </ul>
+
+    <h2 class="doc-h2">4.6 &nbsp; Implement &amp; manage security on models</h2>
+    <ul>
+      <li><b>RLS.</b> Define roles with DAX filter expressions; test with "View as role". Static (hardcoded) or dynamic (<code>USERPRINCIPALNAME()</code>).</li>
+      <li><b>OLS.</b> Hide entire columns/tables from specific roles (Tabular Editor).</li>
+      <li><b>App audiences.</b> Different role bindings per audience in a Power BI app.</li>
+    </ul>
+
+    <div class="two">
+      <div>
+        <h3 class="doc-h3">Dynamic RLS pattern</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        [Region] =<br/>
+        LOOKUPVALUE(<br/>
+        &nbsp;&nbsp;UserSecurity[Region],<br/>
+        &nbsp;&nbsp;UserSecurity[Email],<br/>
+        &nbsp;&nbsp;USERPRINCIPALNAME()<br/>
+        )
+        </p>
+      </div>
+      <div>
+        <h3 class="doc-h3">Time‑intel measure with VAR</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        Sales PY :=<br/>
+        VAR _prev =<br/>
+        &nbsp;&nbsp;CALCULATE(<br/>
+        &nbsp;&nbsp;&nbsp;[Sales],<br/>
+        &nbsp;&nbsp;&nbsp;SAMEPERIODLASTYEAR('Date'[Date])<br/>
+        &nbsp;&nbsp;)<br/>
+        RETURN _prev
+        </p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="tag">Pro tip</div>
+      <p>If a DAX measure is slow, first check whether you are <b>iterating</b> a large fact table. Replace <code>SUMX(Fact, Fact[x]*Fact[y])</code> with a pre‑calculated column only if the model isn't DirectLake — otherwise push the math upstream into the Lakehouse/Warehouse.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>04 · Domain 3</span><span class="rule"></span><span>10 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 11 · Domain 4 A · explore/analyze =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 05</span><span>Domain 4 · Explore &amp; Analyze</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">05</span><span>Domain 4 · 20 – 25%</span></div>
+    <h1 class="doc-h1">Explore &amp; analyze <em class="q">data.</em></h1>
+
+    <h2 class="doc-h2">5.1 &nbsp; Exploratory tools in Fabric</h2>
+    <ul>
+      <li><b>SQL endpoint.</b> Read‑only T‑SQL over a Lakehouse for visual query, ad‑hoc SELECTs, saving views. Joins across Lakehouse + Warehouse via cross‑database queries within the same workspace.</li>
+      <li><b>Notebooks.</b> <code>%%sql</code>, <code>%%pyspark</code>, <code>display()</code> for rich previews, <code>describe</code> for profiling.</li>
+      <li><b>Power BI Datamart / Dataflow.</b> Low‑code explore with Power Query.</li>
+      <li><b>Copilot for Data.</b> Natural‑language queries over Lakehouse/Warehouse — good for quick exploration but validate results.</li>
+    </ul>
+
+    <h2 class="doc-h2">5.2 &nbsp; Descriptive / data profiling</h2>
+    <table class="data">
+      <thead><tr><th style="width:28%">Metric</th><th>T‑SQL / SparkSQL</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>Row count</td><td><code>SELECT COUNT(*)</code></td><td>Sanity check after load.</td></tr>
+        <tr><td>Cardinality</td><td><code>COUNT(DISTINCT col)</code></td><td>Dedupe targets, key candidates.</td></tr>
+        <tr><td>Null ratio</td><td><code>AVG(CASE WHEN col IS NULL THEN 1.0 ELSE 0 END)</code></td><td>Missing‑data audit.</td></tr>
+        <tr><td>Min / max / avg</td><td><code>MIN</code> / <code>MAX</code> / <code>AVG</code></td><td>Range sanity + outlier hunt.</td></tr>
+        <tr><td>Top frequencies</td><td><code>GROUP BY col ORDER BY count DESC</code></td><td>Skew detection.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">5.3 &nbsp; Query performance — warehouse &amp; SQL endpoint</h2>
+    <ul>
+      <li><b>Query insights.</b> <code>queryinsights.exec_requests_history</code>, long‑running and frequent queries.</li>
+      <li><b>Dynamic management views.</b> <code>sys.dm_exec_*</code> for sessions, requests, waits.</li>
+      <li><b>Execution plan.</b> Look for data movement, Cartesian products, missing stats.</li>
+      <li><b>Result‑set cache.</b> Identical queries return instantly when cache is hot.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">an analyst wants ad‑hoc T‑SQL over Lakehouse Delta tables → <b>SQL endpoint</b>, visual query.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">profiling a new dataset for nulls, skew, cardinality → notebook with <code>display()</code> / T‑SQL profiling queries.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">a repeated slow query → check query insights + plan; enable result‑set caching, update statistics.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>05 · Domain 4</span><span class="rule"></span><span>11 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 12 · Domain 4 B · query patterns =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 05</span><span>Query patterns</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">05 · cont.</span><span>Practical query patterns</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">5.4 &nbsp; Query patterns to recognize on the exam</h2>
+    <div class="two">
+      <div>
+        <h3 class="doc-h3">Running total (windowed)</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        SUM(Amount) OVER (<br/>
+        &nbsp;&nbsp;PARTITION BY CustomerId<br/>
+        &nbsp;&nbsp;ORDER BY OrderDate<br/>
+        &nbsp;&nbsp;ROWS UNBOUNDED PRECEDING<br/>
+        ) AS RunTotal
+        </p>
+        <h3 class="doc-h3">Top N per group</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        WITH r AS (<br/>
+        &nbsp;SELECT *, ROW_NUMBER() OVER<br/>
+        &nbsp;&nbsp;(PARTITION BY CategoryId<br/>
+        &nbsp;&nbsp;&nbsp;ORDER BY Sales DESC) rn<br/>
+        &nbsp;FROM Products<br/>
+        )<br/>
+        SELECT * FROM r WHERE rn &lt;= 5;
+        </p>
+      </div>
+      <div>
+        <h3 class="doc-h3">MERGE for upsert (Warehouse)</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        MERGE dim.Customer AS t<br/>
+        USING stg.Customer AS s<br/>
+        &nbsp;&nbsp;ON t.CustomerKey = s.CustomerKey<br/>
+        WHEN MATCHED THEN UPDATE SET ...<br/>
+        WHEN NOT MATCHED THEN INSERT (...)<br/>
+        &nbsp;&nbsp;VALUES (...);
+        </p>
+        <h3 class="doc-h3">Cross‑database query</h3>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:8.5pt; background:var(--paper-2); padding:8px 10px; line-height:1.45;">
+        SELECT f.*, d.ProductName<br/>
+        FROM [SalesWH].dbo.FactSales f<br/>
+        JOIN [RetailLH].dbo.DimProduct d<br/>
+        &nbsp;&nbsp;ON f.ProductKey = d.ProductKey;
+        </p>
+      </div>
+    </div>
+
+    <h2 class="doc-h2">5.5 &nbsp; PySpark patterns (notebook)</h2>
+    <ul>
+      <li><code>spark.read.format("delta").load(path)</code> / <code>spark.table("lh.schema.tbl")</code></li>
+      <li><code>.filter()</code>, <code>.groupBy().agg()</code>, <code>.withColumn()</code>, <code>.write.format("delta").mode("append").saveAsTable(...)</code></li>
+      <li>Broadcast small dimensions: <code>F.broadcast(dim_df)</code>.</li>
+      <li>Prefer <code>F</code> functions over UDFs; avoid <code>collect()</code> on large sets.</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="tag">Pro tip</div>
+      <p>Windowed dedup, top‑N, running totals, and MERGE upsert are the four SQL patterns most likely to appear in drag‑and‑drop questions. Know what each one looks like at a glance.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>05 · Domain 4</span><span class="rule"></span><span>12 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 13 · Service comparison =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 06</span><span>Service comparison tables</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">06</span><span>Service comparison tables</span></div>
+    <h1 class="doc-h1">Choose the right <em class="q">tool.</em></h1>
+
+    <h2 class="doc-h2" style="margin-top:10px;">Fabric data stores compared</h2>
+    <table class="data">
+      <thead><tr><th>Feature</th><th>Lakehouse</th><th>Warehouse</th><th>KQL Database</th><th>SQL DB in Fabric</th></tr></thead>
+      <tbody>
+        <tr><td>Primary workload</td><td>Files + Delta tables</td><td>T‑SQL DW</td><td>Real‑time / telemetry</td><td>OLTP</td></tr>
+        <tr><td>Language</td><td>Spark SQL / PySpark</td><td>T‑SQL</td><td>KQL</td><td>T‑SQL</td></tr>
+        <tr><td>SQL writes</td><td><span class="badge no">read‑only endpoint</span></td><td><span class="badge ok">full</span></td><td>Append</td><td><span class="badge ok">full</span></td></tr>
+        <tr><td>Multi‑table txn</td><td><span class="badge no">no</span></td><td><span class="badge ok">yes</span></td><td><span class="badge no">no</span></td><td><span class="badge ok">yes</span></td></tr>
+        <tr><td>Unstructured files</td><td><span class="badge ok">yes</span></td><td><span class="badge no">no</span></td><td><span class="badge no">no</span></td><td><span class="badge no">no</span></td></tr>
+        <tr><td>Best for</td><td>Medallion, ML, raw+curated</td><td>Star schema, gold serving</td><td>Logs, IoT, events</td><td>App backend</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">Storage modes for semantic models</h2>
+    <table class="data">
+      <thead><tr><th style="width:20%">Mode</th><th>Data location</th><th>Refresh model</th><th>Choose when…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Import</b></td><td>In‑memory Vertipaq</td><td>Scheduled</td><td>Fastest reports, complex DAX, size fits memory.</td></tr>
+        <tr><td><b>DirectQuery</b></td><td>Stays in source</td><td>On query</td><td>Real‑time, very large, can't import.</td></tr>
+        <tr><td><b>DirectLake</b></td><td>Delta in OneLake, loaded on demand</td><td>Framing</td><td>Fabric‑native, always current, near‑Import speed.</td></tr>
+        <tr><td><b>Composite</b></td><td>Mixed (Dual tables)</td><td>Mixed</td><td>Hybrid: Import facts + DQ dims.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">Transformation language — at a glance</h2>
+    <table class="data">
+      <thead><tr><th>Language</th><th>Strength</th><th>Typical item</th></tr></thead>
+      <tbody>
+        <tr><td><b>Power Query (M)</b></td><td>Low‑code UI shaping.</td><td>Dataflow Gen2</td></tr>
+        <tr><td><b>PySpark / Spark SQL</b></td><td>Distributed compute, ML.</td><td>Notebook</td></tr>
+        <tr><td><b>T‑SQL</b></td><td>Set ops, transactions, views.</td><td>Warehouse, SQL endpoint (read)</td></tr>
+        <tr><td><b>DAX</b></td><td>Analytical measures in model.</td><td>Semantic model</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="runfoot"><span>06 · Comparison</span><span class="rule"></span><span>13 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 14 · PITFALLS =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 07</span><span>Common pitfalls</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">07</span><span>Common pitfalls &amp; distractor answers</span></div>
+    <h1 class="doc-h1">Plausible, but <em class="q">wrong.</em></h1>
+    <p style="max-width:5.4in; color:var(--ink-2); margin-bottom:8px;">The exam uses plausible‑sounding options to test depth of understanding. Twelve of the most common traps, with corrections.</p>
+
+    <div class="pit">
+      <div class="n">01</div>
+      <div>
+        <div class="claim">Lakehouse SQL endpoint supports full DML.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">The Lakehouse SQL endpoint is <b>read‑only</b>. For full T‑SQL DML use a <b>Warehouse</b> or write via Spark.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">02</div>
+      <div>
+        <div class="claim">DirectLake needs a scheduled refresh.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">DirectLake reads Delta on demand. Only <b>framing</b> / schema refresh is needed — no data copy.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">03</div>
+      <div>
+        <div class="claim">Calculated columns are fine in a DirectLake model.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Calculated columns/tables are <b>not supported</b> in DirectLake. Push derivations upstream into Lakehouse/Warehouse.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">04</div>
+      <div>
+        <div class="claim">Shortcuts copy data into OneLake.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Shortcuts <b>virtualize</b> data — no copy, no egress. Source changes are visible immediately.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">05</div>
+      <div>
+        <div class="claim">Mirroring is bidirectional.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Mirroring is <b>read‑only</b> in OneLake. Writes go to the source system (Azure SQL, Cosmos DB, Snowflake).</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">06</div>
+      <div>
+        <div class="claim">Dynamic Data Masking encrypts data.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">DDM masks at presentation only. Privileged users still see real data.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">07</div>
+      <div>
+        <div class="claim">Git integration replaces deployment pipelines.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Git tracks change; <b>deployment pipelines</b> promote items across stages. Use both.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">08</div>
+      <div>
+        <div class="claim">Partitioning always speeds up a Lakehouse table.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">High‑cardinality partitioning creates tiny files and <b>hurts</b> performance. Partition on low‑cardinality filter columns only.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">09</div>
+      <div>
+        <div class="claim">OPTIMIZE and VACUUM do the same thing.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">OPTIMIZE compacts small files; VACUUM removes obsolete files past retention. Different operations.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">10</div>
+      <div>
+        <div class="claim">Bi‑directional relationships are the default best practice.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Use single‑direction one‑to‑many by default. Bi‑directional introduces ambiguity and performance cost — only when justified.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">11</div>
+      <div>
+        <div class="claim">Calculated columns are better than measures for performance.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Measures compute at query time without inflating model size. Calculated columns bloat memory — prefer measures when possible.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">12</div>
+      <div>
+        <div class="claim">Endorsement is the same as a sensitivity label.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Endorsement (Promoted / Certified) signals <b>trust</b>. Sensitivity labels enforce <b>protection</b>. Different purposes.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>07 · Pitfalls</span><span class="rule"></span><span>14 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 15 · CHECKLIST =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · 08</span><span>Final checklist</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">08</span><span>Night‑before review · 20 must‑know items</span></div>
+    <h1 class="doc-h1">Twenty things you must <em class="q">know.</em></h1>
+    <p style="max-width:5.4in; color:var(--ink-2); margin-bottom:10px;">Review the night before. If any item feels unfamiliar, revisit that topic in the guide.</p>
+
+    <div class="check-grid">
+      <div class="check-item"><span class="box"></span><span class="n">01</span><span class="t">You can choose between <b>Lakehouse and Warehouse</b> and justify on workload, DML, and transactions.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">02</span><span class="t">You understand the <b>medallion (bronze / silver / gold)</b> pattern and layer responsibilities.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">03</span><span class="t">You can set up <b>Git integration</b> and a <b>deployment pipeline</b>, and know they are complementary.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">04</span><span class="t">You can apply <b>workspace, item, row, column, object, file</b> access controls.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">05</span><span class="t">You can implement <b>dynamic RLS</b> with <code>USERPRINCIPALNAME()</code> and a security table.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">06</span><span class="t">You understand <b>Shortcuts</b> (zero‑copy) vs. <b>Mirroring</b> (read‑only replica) vs. <b>Copy</b>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">07</span><span class="t">You can ingest via <b>Copy activity, Dataflow Gen2, Notebook, Shortcut, Mirroring</b>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">08</span><span class="t">You can transform with <b>Power Query (M), PySpark, T‑SQL</b>, and pick by persona.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">09</span><span class="t">You can implement <b>SCD Type 1 and Type 2</b>, dedup, late‑arriving facts.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">10</span><span class="t">You can maintain Delta tables with <b>V‑Order, OPTIMIZE, Z‑ORDER, VACUUM</b> — and pick the right one.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">11</span><span class="t">You understand <b>Import vs. DirectQuery vs. DirectLake vs. Composite</b> and when to choose each.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">12</span><span class="t">You know <b>DirectLake limits</b>: no calculated columns/tables; fallback to DirectQuery.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">13</span><span class="t">You can design a <b>star schema</b> with conformed dims, surrogate keys, proper relationships.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">14</span><span class="t">You can write core DAX: <b>CALCULATE, FILTER, time‑intel, iterators, VAR</b>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">15</span><span class="t">You can configure <b>incremental refresh</b> with <code>RangeStart</code>/<code>RangeEnd</code> and detect‑changes.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">16</span><span class="t">You can connect via the <b>XMLA endpoint</b> using SSMS / Tabular Editor / ALM Toolkit.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">17</span><span class="t">You can profile data with <b>T‑SQL or Spark</b> (counts, nulls, cardinality, distributions).</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">18</span><span class="t">You can investigate slow queries via <b>query insights, DMVs, execution plans</b>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">19</span><span class="t">You recognize common <b>SQL patterns</b>: window functions, top‑N per group, MERGE upsert.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">20</span><span class="t">You can design end‑to‑end: <b>ingest → medallion → semantic model → report</b> on Fabric.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>08 · Checklist</span><span class="rule"></span><span>15 / 16</span></div>
+</section>
+
+<!-- =================== PAGE 16 · CLOSER =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑600 · Colophon</span><span>Closing</span></div>
+  <div class="page-body closer">
+    <div class="eyebrow" style="margin-bottom:14px;">— Good luck</div>
+    <div class="big">
+      Focus on scenario‑based <em>reasoning:</em> understand not just what each Fabric item does, but <em>when</em> and <em>why</em> you would pick Lakehouse over Warehouse, DirectLake over Import, or a measure over a calculated column.
+    </div>
+
+    <div style="margin-top:48px; display:grid; grid-template-columns:1fr; gap:40px; width:100%; max-width:6.5in;">
+      <div>
+        <div class="eyebrow">Source</div>
+        <p style="margin-top:6px; font-size:10pt;">Microsoft Learn — Study Guide for Exam DP‑600, Implementing Analytics Solutions Using Microsoft Fabric.</p>
+      </div>
+    </div>
+
+    <div class="sign">End of guide · DP‑600</div>
+  </div>
+  <div class="runfoot"><span>DP‑600</span><span class="rule"></span><span>16 / 16</span></div>
+</section>
+
+<script>
+  const style = document.createElement('style');
+  style.textContent = `@page { size: Letter; margin: 0; }`;
+  document.head.appendChild(style);
+</script>
+</body>
+</html>

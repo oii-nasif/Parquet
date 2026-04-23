@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>DP-800 Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141414;
+    --ink-2:#2a2a2a;
+    --mute:#6b6b66;
+    --line:#d9d6ce;
+    --line-2:#e8e5dc;
+    --paper:#faf8f2;
+    --paper-2:#f3efe4;
+    --accent:oklch(0.42 0.16 28);   /* DP-800 · crimson */
+    --accent-2:oklch(0.55 0.13 45);  /* burnt ochre */
+    --warn:oklch(0.55 0.15 25);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e6e2d6;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    font-size:9.5pt;
+    line-height:1.5;
+    font-feature-settings:"ss01","cv11","tnum";
+  }
+
+  /* ---------- Page ---------- */
+  .page{
+    width:8.5in;
+    height:11in;
+    background:var(--paper);
+    margin:24px auto;
+    padding:0.55in 0.7in 0.5in 0.7in;
+    position:relative;
+    box-shadow:0 4px 28px rgba(0,0,0,.12);
+    page-break-after:always;
+    break-after:page;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .page:last-child{page-break-after:auto; break-after:auto;}
+
+  .page-body{flex:1;}
+
+  /* running head + foot */
+  .runhead{
+    position:absolute;
+    top:0.3in;
+    left:0.75in;
+    right:0.75in;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+    text-transform:uppercase;
+  }
+  .runhead .brand{color:var(--ink);font-weight:600;}
+  .runfoot{
+    position:absolute;
+    bottom:0.3in;
+    left:0.75in;
+    right:0.75in;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+  }
+  .runfoot .rule{flex:1;border-top:1px solid var(--line);margin:7px 14px 0;}
+
+  /* ---------- Typography ---------- */
+  h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:8.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    font-weight:500;
+  }
+  p{margin:0 0 0.45em;}
+  .serif{font-family:'Newsreader',serif;}
+  em.q{font-family:'Newsreader',serif;font-style:italic;color:var(--ink-2);}
+
+  ul{margin:0.2em 0 0.5em 0; padding:0; list-style:none;}
+  ul li{
+    position:relative;
+    padding-left:16px;
+    margin:0.22em 0;
+  }
+  ul li::before{
+    content:"";
+    position:absolute;
+    left:0; top:0.55em;
+    width:6px; height:1px;
+    background:var(--ink);
+  }
+
+  code, .mono{font-family:'JetBrains Mono',monospace; font-size:0.92em;}
+  code{background:var(--paper-2); padding:1px 5px; border-radius:2px; color:var(--ink);}
+
+  /* ---------- Cover ---------- */
+  .cover{padding:0;}
+  .cover .inner{
+    padding:0.7in 0.7in 0.5in;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .cover .mark{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .cover .mark .dot{
+    width:10px;height:10px;background:var(--ink);display:inline-block;
+  }
+  .cover h1.title{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:78pt;
+    line-height:0.92;
+    letter-spacing:-0.025em;
+    margin-top:48px;
+  }
+  .cover h1.title .num{font-style:italic;color:var(--accent);}
+  .cover .subtitle{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:22pt;
+    line-height:1.25;
+    color:var(--ink-2);
+    margin-top:24px;
+    max-width:6in;
+    font-weight:400;
+  }
+  .cover .lede{
+    margin-top:36px;
+    font-size:11pt;
+    max-width:5.2in;
+    color:var(--ink-2);
+    line-height:1.6;
+  }
+  .cover .meta-grid{
+    margin-top:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--ink);
+    padding-top:18px;
+  }
+  .cover .meta-grid .cell{
+    display:flex;flex-direction:column;gap:6px;
+    padding-right:16px;
+  }
+  .cover .meta-grid .k{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .cover .meta-grid .v{font-size:12pt; font-weight:500;}
+  .cover .meta-grid .v small{font-weight:400; color:var(--mute); font-size:9pt;}
+
+  .cover .weights{
+    margin-top:28px;
+    display:grid;
+    grid-template-columns:1.2fr auto;
+    gap:0 28px;
+  }
+  .cover .weights .label{
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+    font-size:10.5pt;
+  }
+  .cover .weights .val{
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+    text-align:right;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:500;
+    font-size:10.5pt;
+  }
+  .cover .weights .label:first-child,
+  .cover .weights .val:nth-child(2){
+    border-top:1px solid var(--line);
+  }
+
+  /* ---------- Section / heading patterns ---------- */
+  .doc-h1{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:26pt;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin:4px 0 12px;
+  }
+  .doc-h2{
+    font-size:12pt;
+    font-weight:600;
+    margin:14px 0 5px;
+    letter-spacing:-0.01em;
+  }
+  .doc-h3{
+    font-size:9.5pt;
+    font-weight:600;
+    margin:12px 0 4px;
+    letter-spacing:0.01em;
+  }
+  .section-rule{
+    border-top:1px solid var(--ink);
+    margin:0 0 14px;
+    padding-top:8px;
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .section-rule .idx{color:var(--ink);font-weight:600;}
+
+  /* ---------- TOC ---------- */
+  .toc{display:grid; grid-template-columns:1fr; gap:0; margin-top:8px;}
+  .toc .row{
+    display:grid;
+    grid-template-columns:48px 1fr auto;
+    align-items:baseline;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    gap:14px;
+  }
+  .toc .row:first-child{border-top:1px solid var(--line);}
+  .toc .no{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    letter-spacing:0.06em;
+  }
+  .toc .ttl{
+    font-family:'Newsreader',serif;
+    font-size:14pt;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+  .toc .ttl .sub{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-size:9.5pt;
+    color:var(--mute);
+    font-weight:400;
+    letter-spacing:0;
+    margin-top:2px;
+  }
+  .toc .pg{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10pt;
+    color:var(--ink);
+  }
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    margin:12px 0;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    background:var(--paper-2);
+    position:relative;
+  }
+  .callout .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .callout.alert .tag{color:var(--warn);}
+  .callout.tip .tag{color:var(--accent-2);}
+  .callout p:last-child{margin-bottom:0;}
+
+  /* Scenario block */
+  .scenarios{
+    margin:10px 0 8px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:6px 0;
+  }
+  .scenarios .row{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:16px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--line);
+  }
+  .scenarios .row:last-child{border-bottom:none;}
+  .scenarios .if{
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--mute);
+    padding-top:3px;
+    min-width:28px;
+  }
+  .scenarios .then{font-size:9.25pt; line-height:1.45;}
+  .scenarios .then b{font-weight:600;color:var(--accent);}
+
+  /* ---------- Tables ---------- */
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0 10px;
+    font-size:8.75pt;
+  }
+  table.data th,
+  table.data td{
+    text-align:left;
+    padding:7px 10px 7px 0;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+    line-height:1.35;
+  }
+  table.data thead th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    font-weight:600;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--ink);
+  }
+  table.data tbody tr:last-child td{border-bottom:1px solid var(--ink);}
+  table.data td.n{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:500;
+  }
+  .badge{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:2px 6px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    color:var(--ink-2);
+  }
+  .badge.ok{border-color:oklch(0.7 0.1 145); color:oklch(0.45 0.12 145);}
+  .badge.no{border-color:oklch(0.7 0.12 25); color:oklch(0.48 0.14 25);}
+  .badge.mid{border-color:oklch(0.75 0.1 85); color:oklch(0.48 0.12 65);}
+
+  /* ---------- Pitfalls ---------- */
+  .pit{
+    display:grid;
+    grid-template-columns:28px 1fr;
+    gap:10px;
+    padding:6px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .pit:first-of-type{border-top:1px solid var(--ink);}
+  .pit .n{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    padding-top:2px;
+  }
+  .pit .claim{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:10pt;
+    line-height:1.3;
+    color:var(--ink-2);
+    margin-bottom:2px;
+  }
+  .pit .claim::before{content:"“";}
+  .pit .claim::after{content:"”";}
+  .pit .verdict{
+    font-family:'JetBrains Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--warn);
+    font-weight:600;
+    margin-right:6px;
+  }
+  .pit .truth{font-size:9pt;}
+
+  /* ---------- Checklist ---------- */
+  .check-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+    border-top:1px solid var(--ink);
+  }
+  .check-item{
+    display:grid;
+    grid-template-columns:22px 28px 1fr;
+    gap:10px;
+    align-items:start;
+    padding:6px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .check-item .box{
+    width:14px;height:14px;
+    border:1.5px solid var(--ink);
+    margin-top:2px;
+  }
+  .check-item .n{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt;
+    color:var(--mute);
+    padding-top:2px;
+  }
+  .check-item .t{font-size:9pt; line-height:1.4;}
+
+  /* ---------- 2-col layouts ---------- */
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  .three{display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px;}
+
+  /* domain weight bar */
+  .weight-bar{
+    display:flex;
+    height:10px;
+    border:1px solid var(--ink);
+    margin:8px 0 4px;
+  }
+  .weight-bar span{display:block;}
+  .weight-bar .a{background:var(--accent);}
+  .weight-bar .b{background:var(--ink);}
+  .weight-bar .c{background:var(--accent-2);}
+  .weight-legend{
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8pt;
+    letter-spacing:0.08em;
+    color:var(--mute);
+    text-transform:uppercase;
+  }
+
+  /* closing page */
+  .closer{
+    display:flex; flex-direction:column; justify-content:center;
+    align-items:flex-start;
+    flex:1;
+    padding-top:40px;
+  }
+  .closer .big{
+    font-family:'Newsreader',serif;
+    font-weight:400;
+    font-size:48pt;
+    line-height:0.98;
+    letter-spacing:-0.02em;
+    max-width:6in;
+  }
+  .closer .big em{color:var(--accent);font-style:italic;}
+  .closer .sign{
+    margin-top:60px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:8.5pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  @media print{
+    html,body{background:white;}
+    .page{margin:0; box-shadow:none;}
+  }
+
+  /* Toolbar for print */
+  .print-bar{
+    position:fixed; top:16px; right:16px; z-index:99;
+    background:var(--ink); color:var(--paper);
+    font-family:'JetBrains Mono',monospace;
+    font-size:9pt; letter-spacing:0.12em; text-transform:uppercase;
+    padding:10px 16px; border:none; cursor:pointer;
+  }
+  @media print{.print-bar{display:none;}}
+</style>
+</head>
+<body>
+
+<button class="print-bar" onclick="window.print()">Print / Save PDF</button>
+
+<!-- =================== COVER =================== -->
+<section class="page cover">
+  <div class="inner page-body">
+    <div class="mark"><span class="dot"></span> Microsoft Certified · SQL AI Developer Associate</div>
+
+    <h1 class="title">Exam <span class="num">DP‑800</span><br/>Study Guide</h1>
+
+    <div class="subtitle">Developing AI‑Enabled Database Solutions across SQL Server, Azure SQL, and SQL DB in Fabric.</div>
+
+    <p class="lede">A consolidated, scenario‑first reference organized around the three official exam domains. Every topic is paired with the decisions and distractors you will actually encounter on the exam.</p>
+
+    <div style="margin-top:48px;">
+      <div class="eyebrow" style="margin-bottom:10px;">Domain weighting</div>
+      <div class="weight-bar" aria-hidden="true">
+        <span class="a" style="width:37.5%"></span>
+        <span class="b" style="width:37.5%"></span>
+        <span class="c" style="width:25%"></span>
+      </div>
+      <div class="weight-legend">
+        <span>Design &amp; Develop · 35–40%</span>
+        <span>Secure, Optimize, Deploy · 35–40%</span>
+        <span>AI Capabilities · 25–30%</span>
+      </div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="cell"><span class="k">Exam code</span><span class="v">DP‑800</span></div>
+      <div class="cell"><span class="k">Duration</span><span class="v">100 min <small>/ 120 seat</small></span></div>
+      <div class="cell"><span class="k">Questions</span><span class="v">40 – 60</span></div>
+      <div class="cell"><span class="k">Passing score</span><span class="v">700 / 1000</span></div>
+    </div>
+  </div>
+  <div class="runfoot">
+    <span class="rule"></span>
+    <span>01 / 15</span>
+  </div>
+</section>
+
+<!-- =================== PAGE 2 · TOC =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · Study Guide</span><span>Table of Contents</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">00</span><span>Contents</span></div>
+    <h1 class="doc-h1">What's inside.</h1>
+    <p style="max-width:5.2in; color:var(--ink-2); margin-bottom:28px;">Seven chapters covering the exam blueprint, deep topic notes, comparison tables, the traps this exam likes to set, and a twenty‑item pre‑exam checklist.</p>
+
+    <div class="toc">
+      <div class="row"><span class="no">01</span>
+        <span class="ttl">Exam Domains &amp; Weightage
+          <span class="sub">Blueprint, audience profile, and what the exam actually tests.</span>
+        </span>
+        <span class="pg">p. 03</span></div>
+      <div class="row"><span class="no">02</span>
+        <span class="ttl">Domain 1 — Design &amp; Develop
+          <span class="sub">Tables, programmability, advanced T‑SQL, AI‑assisted tooling.</span>
+        </span>
+        <span class="pg">p. 04</span></div>
+      <div class="row"><span class="no">03</span>
+        <span class="ttl">Domain 2 — Secure, Optimize, Deploy
+          <span class="sub">Security, performance, CI/CD, Azure integration.</span>
+        </span>
+        <span class="pg">p. 07</span></div>
+      <div class="row"><span class="no">04</span>
+        <span class="ttl">Domain 3 — AI Capabilities
+          <span class="sub">Embeddings, intelligent search, RAG in T‑SQL.</span>
+        </span>
+        <span class="pg">p. 10</span></div>
+      <div class="row"><span class="no">05</span>
+        <span class="ttl">Service Comparison Tables
+          <span class="sub">SQL platforms, encryption methods, DAB vs. custom APIs.</span>
+        </span>
+        <span class="pg">p. 12</span></div>
+      <div class="row"><span class="no">06</span>
+        <span class="ttl">Common Pitfalls &amp; Distractors
+          <span class="sub">Twelve plausible‑but‑wrong answers the exam loves.</span>
+        </span>
+        <span class="pg">p. 13</span></div>
+      <div class="row"><span class="no">07</span>
+        <span class="ttl">Final Checklist — 20 Must‑Knows
+          <span class="sub">Night‑before review list.</span>
+        </span>
+        <span class="pg">p. 14</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>DP‑800</span><span class="rule"></span><span>02 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 3 · DOMAINS =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 01</span><span>Exam Domains</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">01</span><span>Official Exam Domains &amp; Weightage</span></div>
+    <h1 class="doc-h1">The blueprint.</h1>
+
+    <p style="max-width:5.4in; color:var(--ink-2);">The DP‑800 exam validates your ability to design, develop, secure, optimize, and deploy AI‑enabled database solutions across SQL Server, Azure SQL, and SQL databases in Microsoft Fabric.</p>
+
+    <h2 class="doc-h2">Audience profile</h2>
+    <ul>
+      <li>Subject matter expertise in designing AI‑enabled database solutions across Microsoft SQL platforms.</li>
+      <li>Experience writing T‑SQL and developing databases on SQL Server, Azure SQL, and Fabric SQL DB.</li>
+      <li>Familiarity with CI/CD in GitHub and AI‑assisted tools — GitHub Copilot, Copilot in Fabric.</li>
+      <li>Understanding of AI concepts: embeddings, vectors, models, and retrieval‑augmented generation (RAG).</li>
+    </ul>
+
+    <h2 class="doc-h2">Weighting</h2>
+    <table class="data">
+      <thead><tr><th style="width:60%">Domain</th><th>Weight</th><th>Focus</th></tr></thead>
+      <tbody>
+        <tr><td><b>01 &nbsp; Design &amp; Develop Database Solutions</b></td><td class="n">35 – 40%</td><td>Schema, T‑SQL, AI tooling</td></tr>
+        <tr><td><b>02 &nbsp; Secure, Optimize &amp; Deploy</b></td><td class="n">35 – 40%</td><td>Security, perf, CI/CD, Azure</td></tr>
+        <tr><td><b>03 &nbsp; Implement AI Capabilities</b></td><td class="n">25 – 30%</td><td>Embeddings, search, RAG</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p>Most questions cover GA features, but commonly used Preview features — T‑SQL vector functions, <code>AI_*</code> functions — may appear. Expect heavy case‑study and scenario‑based questions.</p>
+    </div>
+
+    <h2 class="doc-h2">Format at a glance</h2>
+    <div class="three">
+      <div>
+        <div class="eyebrow">Platforms</div>
+        <p style="margin-top:4px;">SQL Server · Azure SQL · SQL DB in Fabric</p>
+      </div>
+      <div>
+        <div class="eyebrow">Question types</div>
+        <p style="margin-top:4px;">Multiple choice · Drag‑and‑drop · Case studies</p>
+      </div>
+      <div>
+        <div class="eyebrow">Duration &amp; scoring</div>
+        <p style="margin-top:4px;">100 min · 40–60 items · 700 / 1000 to pass</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>01 · Domains</span><span class="rule"></span><span>03 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 4 · DOMAIN 1 part A =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 02</span><span>Domain 1 · Design &amp; Develop</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">02</span><span>Domain 1 · 35 – 40%</span></div>
+    <h1 class="doc-h1">Design &amp; develop <em class="q">database solutions.</em></h1>
+
+    <h2 class="doc-h2">2.1 &nbsp; Design &amp; implement database objects</h2>
+    <h3 class="doc-h3">Core concepts</h3>
+    <ul>
+      <li><b>Table design.</b> Appropriate data types and column sizes. When <code>NVARCHAR(MAX)</code> vs. fixed‑length — and the storage / performance impact.</li>
+      <li><b>Specialized tables.</b> In‑memory (<code>MEMORY_OPTIMIZED</code>) for OLTP‑heavy workloads; temporal for point‑in‑time audit; ledger for tamper‑evidence; graph for relationship data; external for data outside SQL.</li>
+      <li><b>JSON columns &amp; indexes.</b> Store semi‑structured data natively. Index computed columns on JSON paths for performant queries.</li>
+      <li><b>Columnstore.</b> Clustered replaces the heap for analytics; nonclustered adds analytics to OLTP tables (HTAP).</li>
+      <li><b>Partitioning.</b> Partition large tables by range (e.g. date) via a partition function + scheme mapped to filegroups.</li>
+      <li><b>Constraints.</b> <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>UNIQUE</code>, <code>CHECK</code>, <code>DEFAULT</code>.</li>
+      <li><b>Sequences.</b> <code>SEQUENCE</code> objects generate ordered numeric values independently of any table — prefer over <code>IDENTITY</code> when you need values before INSERT or across tables.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">the business needs an immutable audit trail that regulators can verify → use a <b>Ledger table</b>. Temporal tables track history but are mutable by admins; ledger tables provide cryptographic tamper‑evidence.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">the workload mixes heavy OLTP writes with occasional analytics → add a <b>nonclustered columnstore index</b> for real‑time operational analytics (HTAP).</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">JSON documents are queried by a known set of paths → create <b>computed columns on those paths and index them</b>, rather than scanning JSON at query time.</span></div>
+    </div>
+
+    <h2 class="doc-h2">2.2 &nbsp; Implement programmability objects</h2>
+    <ul>
+      <li><b>Views.</b> Simplify joins, enforce column‑level security, provide backward compatibility. <em>Indexed views</em> materialize results.</li>
+      <li><b>Scalar UDFs.</b> Return a single value. Inline scalar UDFs (SQL Server 2019+) can be inlined by the optimizer; otherwise row‑by‑row execution hurts.</li>
+      <li><b>Table‑valued functions.</b> <em>Inline TVFs</em> are preferred (optimizer expands them like views). <em>Multi‑statement TVFs</em> have fixed cardinality estimates — avoid for large data.</li>
+      <li><b>Stored procedures.</b> Encapsulate logic server‑side; parameterized execution, <code>TRY/CATCH</code>, transaction management.</li>
+      <li><b>Triggers.</b> DML triggers (<code>AFTER</code>, <code>INSTEAD OF</code>); DDL triggers monitor schema changes. Use judiciously — they add hidden complexity.</li>
+    </ul>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p>Know the difference between inline TVFs (single <code>SELECT</code>, no <code>BEGIN/END</code>) and multi‑statement TVFs. The exam often presents performance scenarios where replacing a multi‑statement TVF with an inline TVF is the correct fix.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>02 · Domain 1</span><span class="rule"></span><span>04 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 5 · DOMAIN 1 part B =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 02</span><span>Domain 1 · Design &amp; Develop</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">02 · cont.</span><span>Advanced T‑SQL · AI‑assisted tools</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">2.3 &nbsp; Write advanced T‑SQL</h2>
+    <p>A code‑heavy sub‑domain. Expect to read and write queries using modern T‑SQL features.</p>
+
+    <div class="two">
+      <div>
+        <h3 class="doc-h3">Language features</h3>
+        <ul>
+          <li><b>CTEs.</b> Recursive CTEs for hierarchical data (org charts, BOMs). Anchor + recursive member pattern.</li>
+          <li><b>Window functions.</b> <code>ROW_NUMBER</code>, <code>RANK</code>, <code>DENSE_RANK</code>, <code>NTILE</code> for ranking; <code>LAG</code>/<code>LEAD</code> for row comparison; <code>SUM/AVG OVER</code> for running totals.</li>
+          <li><b>JSON.</b> <code>JSON_OBJECT</code>, <code>JSON_ARRAY</code>, <code>JSON_ARRAYAGG</code>, <code>OPENJSON</code>, <code>JSON_VALUE</code>, <code>JSON_CONTAINS</code>.</li>
+          <li><b>Correlated subqueries.</b> <code>EXISTS</code> / <code>NOT EXISTS</code>. Know when they outperform JOINs.</li>
+          <li><b>Error handling.</b> <code>TRY…CATCH</code>, <code>THROW</code>, <code>RAISERROR</code>, <code>XACT_ABORT</code>, <code>ERROR_NUMBER()</code>, <code>ERROR_MESSAGE()</code>, <code>ERROR_LINE()</code>.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="doc-h3">Text &amp; graph</h3>
+        <ul>
+          <li><b>Regular expressions.</b> <code>REGEXP_LIKE</code>, <code>REGEXP_REPLACE</code>, <code>REGEXP_SUBSTR</code>, <code>REGEXP_INSTR</code>, <code>REGEXP_COUNT</code>, <code>REGEXP_MATCHES</code>, <code>REGEXP_SPLIT_TO_TABLE</code>.</li>
+          <li><b>Fuzzy matching.</b> <code>EDIT_DISTANCE</code> (Levenshtein), <code>EDIT_DISTANCE_SIMILARITY</code> (%), <code>JARO_WINKLER_DISTANCE</code>. Dedup, data cleansing, approximate matching.</li>
+          <li><b>Graph queries.</b> <code>NODE</code> / <code>EDGE</code> tables with the <code>MATCH</code> operator for pattern matching across relationships.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="tag">Pro tip</div>
+      <p>The new regex and fuzzy‑matching functions are heavily tested. Practice combining <code>REGEXP_LIKE</code> in <code>WHERE</code> clauses for data validation, and <code>EDIT_DISTANCE</code> for approximate‑match scenarios in customer data.</p>
+    </div>
+
+    <h2 class="doc-h2">2.4 &nbsp; Design SQL solutions with AI‑assisted tools</h2>
+    <p>A new, distinctive sub‑domain covering Copilot integration and the Model Context Protocol.</p>
+
+    <h3 class="doc-h3">Core concepts</h3>
+    <ul>
+      <li><b>Security impact.</b> Copilot suggestions may expose sensitive schema or data patterns. Configure policies to limit data exposure.</li>
+      <li><b>GitHub Copilot for SQL.</b> Enable in VS Code / Azure Data Studio. Chat‑based prompts to generate T‑SQL. Respects <code>.github/copilot‑instructions.md</code> for project‑specific standards.</li>
+      <li><b>Copilot in Fabric.</b> AI assistance inside the Fabric SQL editor. Works with Fabric SQL databases.</li>
+      <li><b>MCP — Model Context Protocol.</b> A standard for connecting AI models to data tools. Configure MCP tool options in Copilot chat; connect to MCP server endpoints for SQL Server and Fabric lakehouse.</li>
+      <li><b>Instruction files.</b> Customize naming conventions, prohibited patterns, preferred T‑SQL constructs.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">the team wants Copilot to follow company naming conventions (e.g. <code>tbl_</code> prefix, snake_case columns) → create a <b>copilot‑instructions.md</b> file with explicit rules.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">a developer needs AI‑assisted queries over Fabric lakehouse data → configure an <b>MCP server endpoint</b> pointing to the lakehouse.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>02 · Domain 1</span><span class="rule"></span><span>05 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 6 · Divider / at-a-glance =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 02</span><span>Domain 1 · Reference card</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">02 · card</span><span>Table &amp; object decision guide</span></div>
+    <h1 class="doc-h1">When to reach for which <em class="q">object.</em></h1>
+
+    <table class="data">
+      <thead><tr><th style="width:22%">Object</th><th style="width:36%">Choose when…</th><th>Watch out for</th></tr></thead>
+      <tbody>
+        <tr><td><b>Temporal table</b></td><td>You need point‑in‑time queries and a history of changes.</td><td>History is mutable by admins — not tamper‑evident.</td></tr>
+        <tr><td><b>Ledger table</b></td><td>You need cryptographic tamper‑evidence for compliance or regulatory audit.</td><td>Heavier write path; schema changes more restricted.</td></tr>
+        <tr><td><b>In‑memory (OLTP)</b></td><td>Write‑heavy OLTP where latching / locking is the bottleneck.</td><td>Durability trade‑offs; memory footprint.</td></tr>
+        <tr><td><b>Graph (node/edge)</b></td><td>Queries traverse relationships — social graph, fraud detection.</td><td>Avoid for purely relational workloads.</td></tr>
+        <tr><td><b>External table</b></td><td>Query data that lives outside SQL without importing it.</td><td>Latency and per‑query data movement.</td></tr>
+        <tr><td><b>Clustered columnstore</b></td><td>Pure analytical / reporting workload on large tables.</td><td>Not ideal for frequent point updates.</td></tr>
+        <tr><td><b>Nonclustered columnstore</b></td><td>Mix of OLTP writes with occasional analytics (HTAP).</td><td>Maintenance overhead on the rowstore.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">T‑SQL function cheat‑lines</h2>
+    <table class="data">
+      <thead><tr><th style="width:22%">Need</th><th>Function</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Scalar from JSON</td><td><code>JSON_VALUE(doc,'$.path')</code></td><td>Scalars only — not objects.</td></tr>
+        <tr><td>Object / array from JSON</td><td><code>JSON_QUERY</code>, <code>OPENJSON</code></td><td>OPENJSON shreds to rows.</td></tr>
+        <tr><td>Build JSON</td><td><code>JSON_OBJECT</code>, <code>JSON_ARRAY</code>, <code>JSON_ARRAYAGG</code></td><td>Aggregates rows → array.</td></tr>
+        <tr><td>Regex test</td><td><code>REGEXP_LIKE(col,'pattern')</code></td><td>Use in WHERE for validation.</td></tr>
+        <tr><td>Approximate string match</td><td><code>EDIT_DISTANCE</code>, <code>JARO_WINKLER_DISTANCE</code></td><td>Dedup, fuzzy joins.</td></tr>
+        <tr><td>Call external REST</td><td><code>sp_invoke_external_rest_endpoint</code></td><td>Core of RAG pipelines.</td></tr>
+        <tr><td>Similarity over vectors</td><td><code>VECTOR_DISTANCE</code>, <code>VECTOR_SEARCH</code></td><td>ENN without index, ANN with.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <div class="tag">Mental model</div>
+      <p>Exam questions rarely ask "what does function X do?" They ask "given this scenario, which feature do you reach for?" — read every question as a decision tree.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>02 · Reference</span><span class="rule"></span><span>06 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 7 · DOMAIN 2 A · security =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 03</span><span>Domain 2 · Secure, Optimize, Deploy</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03</span><span>Domain 2 · 35 – 40%</span></div>
+    <h1 class="doc-h1">Secure, optimize, &amp; <em class="q">deploy.</em></h1>
+
+    <h2 class="doc-h2">3.1 &nbsp; Data security &amp; compliance</h2>
+    <p>Security is foundational: encryption, masking, row‑ and object‑level access, auditing, endpoint security.</p>
+
+    <ul>
+      <li><b>Always Encrypted.</b> Column‑level encryption where keys never leave the client. <em>Deterministic</em> allows equality comparisons; <em>randomized</em> does not. <em>Enclaves</em> extend to range comparisons and pattern matching.</li>
+      <li><b>Column‑level encryption (T‑SQL).</b> <code>EncryptByKey</code>/<code>DecryptByKey</code>. Keys managed in the database — less secure than AE but more flexible server‑side.</li>
+      <li><b>Dynamic Data Masking.</b> Presentation‑layer masking only. Does not encrypt. Mask types: default, email, partial, random. Users with <code>UNMASK</code> see real data.</li>
+      <li><b>Row‑Level Security.</b> Filter predicates (read) and block predicates (write) via security policies bound to inline TVFs. Identify the user with <code>SESSION_CONTEXT</code> or <code>SYSTEM_USER</code>.</li>
+      <li><b>Object‑level permissions.</b> <code>GRANT</code>, <code>DENY</code>, <code>REVOKE</code>. Principle of least privilege.</li>
+      <li><b>Passwordless auth.</b> Microsoft Entra ID, Managed Identity for service‑to‑service. Eliminates connection‑string secrets.</li>
+      <li><b>Auditing.</b> SQL Server Audit (server + database); Azure SQL Auditing writes to Storage, Log Analytics, or Event Hubs.</li>
+      <li><b>Endpoint security.</b> Secure model, GraphQL, REST, and MCP endpoints with Managed Identity + auth policies.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">sensitive data (SSN, credit card) must be protected even from DBAs → use <b>Always Encrypted</b>. DDM is <i>not</i> sufficient — DBAs can still query the real data.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">multi‑tenant apps need row isolation per tenant → implement <b>Row‑Level Security</b> with a filter predicate keyed on tenant ID.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">applications need to connect to Azure SQL without storing credentials → use <b>Managed Identity</b>.</span></div>
+    </div>
+
+    <h2 class="doc-h2">3.2 &nbsp; Optimize database performance</h2>
+    <ul>
+      <li><b>Execution plans.</b> Read actual vs. estimated. Look for key lookups, table scans, hash joins on large tables, implicit conversions.</li>
+      <li><b>DMVs.</b> <code>sys.dm_exec_query_stats</code>, <code>sys.dm_exec_requests</code>, <code>sys.dm_os_wait_stats</code>, <code>sys.dm_db_index_usage_stats</code>.</li>
+      <li><b>Query Store.</b> Plans + runtime stats over time; plan forcing, regression detection, A/B comparison. SQL Server 2016+ and Azure SQL.</li>
+      <li><b>Query Performance Insight.</b> Azure‑portal view over Query Store — top resource consumers.</li>
+      <li><b>Blocking &amp; deadlocks.</b> <code>sys.dm_exec_requests</code> + <code>sys.dm_tran_locks</code> to find blockers. Deadlock graphs via Extended Events or <code>system_health</code>. Resolve with shorter transactions, consistent access order, <code>SNAPSHOT</code>.</li>
+    </ul>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>07 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 8 · isolation + CI/CD =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 03</span><span>Isolation · CI/CD</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03 · cont.</span><span>Isolation · CI/CD · SQL Database Projects</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">Transaction isolation levels</h2>
+    <table class="data">
+      <thead><tr><th style="width:24%">Level</th><th>Dirty read</th><th>Non‑repeatable</th><th>Phantom</th><th>Blocking</th></tr></thead>
+      <tbody>
+        <tr><td><code>READ UNCOMMITTED</code></td><td><span class="badge no">yes</span></td><td><span class="badge no">yes</span></td><td><span class="badge no">yes</span></td><td>Minimal</td></tr>
+        <tr><td><code>READ COMMITTED</code> <span class="eyebrow" style="margin-left:4px;">(default)</span></td><td><span class="badge ok">no</span></td><td><span class="badge no">yes</span></td><td><span class="badge no">yes</span></td><td>Low</td></tr>
+        <tr><td><code>REPEATABLE READ</code></td><td><span class="badge ok">no</span></td><td><span class="badge ok">no</span></td><td><span class="badge no">yes</span></td><td>Moderate</td></tr>
+        <tr><td><code>SERIALIZABLE</code></td><td><span class="badge ok">no</span></td><td><span class="badge ok">no</span></td><td><span class="badge ok">no</span></td><td>High</td></tr>
+        <tr><td><code>SNAPSHOT</code></td><td><span class="badge ok">no</span></td><td><span class="badge ok">no</span></td><td><span class="badge ok">no</span></td><td>None <span class="eyebrow">· row vers.</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout alert">
+      <div class="tag">Exam alert</div>
+      <p><code>SNAPSHOT</code> isolation eliminates blocking by using row versioning in <code>tempdb</code> — but increases <code>tempdb</code> usage. The exam loves to test when <code>SNAPSHOT</code> is the right choice versus <code>SERIALIZABLE</code>.</p>
+    </div>
+
+    <h2 class="doc-h2">3.3 &nbsp; CI/CD with SQL Database Projects</h2>
+    <ul>
+      <li><b>SQL Database Projects.</b> Declarative, source‑controlled representation of your schema. SDK‑style (<code>.sqlproj</code>) for cross‑platform builds.</li>
+      <li><b>Testing.</b> Unit tests (tSQLt) for stored procedures and functions; integration tests against a real instance.</li>
+      <li><b>Reference / static data.</b> Post‑deployment scripts or <code>MERGE</code> for lookup tables, stored alongside schema.</li>
+      <li><b>Schema drift detection.</b> Compare project model to live database; catch out‑of‑band changes in production.</li>
+      <li><b>Branching &amp; PRs.</b> Feature branches, pull requests with code review, conflict resolution for <code>.sql</code> files.</li>
+      <li><b>Secrets.</b> Never in source. Use Azure Key Vault, GitHub Secrets, or environment variables.</li>
+      <li><b>Pipelines.</b> Build → validate → deploy. Approval gates, branching policies, authentication tables, <code>CODEOWNERS</code> for governance.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">unauthorized schema changes are appearing in production → enable <b>schema drift detection</b> in the pipeline and enforce all changes through SQL Database Projects + pull requests.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">deployments need multi‑environment approval (dev → staging → prod) → configure <b>approval gates and branching policies</b>.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>08 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 9 · Azure services =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 03</span><span>Azure integration</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">03 · cont.</span><span>Integrate SQL with Azure Services</span></div>
+
+    <h2 class="doc-h2" style="margin-top:0;">3.4 &nbsp; Integrate SQL solutions with Azure services</h2>
+    <ul>
+      <li><b>Data API Builder (DAB).</b> Generates REST and GraphQL endpoints from database objects — zero application code. JSON configuration. Caching, pagination, filtering, field‑level authorization.</li>
+      <li><b>Expose database objects.</b> DAB can expose tables, views, and stored procedures as GraphQL types or REST endpoints. Configure relationships for nested queries.</li>
+      <li><b>DAB deployment.</b> Azure Static Web Apps backend, container, or App Service. Managed Identity for database auth.</li>
+      <li><b>Azure Monitor.</b> Application Insights for request telemetry; Log Analytics with KQL for centralized logs. Alerts on query performance or error rates.</li>
+    </ul>
+
+    <h2 class="doc-h2">Change event handling — which mechanism?</h2>
+    <table class="data">
+      <thead><tr><th style="width:28%">Mechanism</th><th style="width:40%">Use case</th><th>Granularity</th></tr></thead>
+      <tbody>
+        <tr><td><b>Change Data Capture (CDC)</b></td><td>Full change history for ETL / audit.</td><td>Row‑level, all columns</td></tr>
+        <tr><td><b>Change Tracking</b></td><td>Lightweight sync — "what changed?"</td><td>Row‑level, flag only</td></tr>
+        <tr><td><b>Change Event Streaming (CES)</b></td><td>Real‑time streaming to downstream systems.</td><td>Event‑based</td></tr>
+        <tr><td><b>Azure Functions + SQL trigger</b></td><td>Serverless reaction to row changes.</td><td>Row‑level, code‑driven</td></tr>
+        <tr><td><b>Azure Logic Apps</b></td><td>Low‑code workflow on data changes.</td><td>Row‑level, connector</td></tr>
+      </tbody>
+    </table>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">a frontend needs a quick REST/GraphQL API over existing tables with no backend code → use <b>Data API Builder</b>.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">downstream systems need real‑time change events → use <b>CES</b> or Azure Functions with the SQL trigger binding.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">you need full before/after images of every change for audit → <b>CDC</b>. If you only need to know which rows changed → <b>Change Tracking</b>.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>03 · Domain 2</span><span class="rule"></span><span>09 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 10 · Domain 3 A =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 04</span><span>Domain 3 · AI Capabilities</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">04</span><span>Domain 3 · 25 – 30%</span></div>
+    <h1 class="doc-h1">Implement <em class="q">AI capabilities.</em></h1>
+
+    <h2 class="doc-h2">4.1 &nbsp; Models &amp; embeddings</h2>
+    <ul>
+      <li><b>External models.</b> AI models hosted outside SQL (Azure OpenAI, etc.). Evaluate on modality (text, image, multimodal), language support, size, latency, cost, structured‑output capability.</li>
+      <li><b>Create &amp; manage external models.</b> Register endpoints in SQL; manage credentials, versioning, failover.</li>
+      <li><b>Embedding maintenance.</b> Embeddings go stale as source data changes. Options: table triggers (sync), Change Tracking, Azure Functions with SQL trigger, Logic Apps, CDC, CES, Microsoft Foundry.</li>
+      <li><b>Column selection.</b> Identify columns with semantic meaning. Concatenate meaningful text. Exclude IDs, timestamps, numeric codes.</li>
+      <li><b>Chunking.</b> Split large text before embedding — by sentence, paragraph, or fixed token count. Overlap for context continuity.</li>
+      <li><b>Generating embeddings.</b> Call the external endpoint from T‑SQL (<code>sp_invoke_external_rest_endpoint</code> or native AI functions). Store vectors in <code>VECTOR</code> columns.</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="tag">Pro tip</div>
+      <p>The exam tests your ability to choose the right embedding maintenance strategy. Triggers are simplest but add latency to writes. CDC + Azure Functions is asynchronous and scalable. Choose based on latency tolerance and write throughput.</p>
+    </div>
+
+    <h2 class="doc-h2">4.2 &nbsp; Intelligent search</h2>
+    <ul>
+      <li><b>Full‑text search.</b> Keyword‑based using inverted indexes — exact and linguistic matches (stemming, thesaurus). <code>CONTAINS</code>, <code>FREETEXT</code>.</li>
+      <li><b>Vector (semantic) search.</b> Similarity over embeddings using cosine, dot product, or Euclidean distance. Returns semantically similar results with no keyword overlap.</li>
+      <li><b>Hybrid search.</b> Combines full‑text + vector using <b>Reciprocal Rank Fusion (RRF)</b> to merge ranked lists.</li>
+      <li><b>Vector data type.</b> Native <code>VECTOR</code> storage; configure dimensionality; supports vector indexes for fast approximate search.</li>
+      <li><b>Vector functions.</b> <code>VECTOR_DISTANCE</code>, <code>VECTOR_NORMALIZE</code>, <code>VECTORPROPERTY</code>, <code>VECTOR_SEARCH</code>.</li>
+      <li><b>ANN vs. ENN.</b> Approximate — fast, uses vector index. Exact — scans all rows, precise but slow. ANN for production; ENN for small datasets or validation.</li>
+      <li><b>Vector index types.</b> IVF, HNSW — evaluate by dataset size, dimensionality, recall, build/query trade‑offs.</li>
+    </ul>
+
+    <table class="data">
+      <thead><tr><th>Search type</th><th>Matches on</th><th>Best for</th><th>Limitation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Full‑Text</b></td><td>Keywords / linguistic forms</td><td>Exact term / phrase lookup</td><td>No semantic understanding</td></tr>
+        <tr><td><b>Vector</b></td><td>Meaning / similarity</td><td>Concept search, synonym handling</td><td>Needs embeddings; approximate</td></tr>
+        <tr><td><b>Hybrid (RRF)</b></td><td>Keywords + meaning</td><td>Production search apps</td><td>More complex setup</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="runfoot"><span>04 · Domain 3</span><span class="rule"></span><span>10 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 11 · RAG =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 04</span><span>Retrieval‑Augmented Generation</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">04 · cont.</span><span>Retrieval‑Augmented Generation</span></div>
+
+    <h1 class="doc-h1" style="margin-bottom:10px;">4.3 &nbsp; <em class="q">RAG</em> in T‑SQL.</h1>
+    <p style="max-width:5.4in; color:var(--ink-2); margin-bottom:20px;">A pattern that grounds language‑model responses in <i>your</i> data. Know the end‑to‑end flow — the exam tests each step individually and as a complete pipeline.</p>
+
+    <!-- RAG pipeline visual -->
+    <div style="border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); padding:20px 0; margin-bottom:22px;">
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;">
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 01</div>
+          <div style="font-weight:600; margin-top:4px;">User query</div>
+          <div style="font-size:9.5pt; color:var(--mute); line-height:1.35;">Natural‑language question arrives from the app.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 02</div>
+          <div style="font-weight:600; margin-top:4px;">Retrieve</div>
+          <div style="font-size:9.5pt; color:var(--mute); line-height:1.35;">Embed the query, vector‑search for context rows.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 03</div>
+          <div style="font-weight:600; margin-top:4px;">Augment</div>
+          <div style="font-size:9.5pt; color:var(--mute); line-height:1.35;">System prompt + context JSON + user question.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 04</div>
+          <div style="font-weight:600; margin-top:4px;">Invoke</div>
+          <div style="font-size:9.5pt; color:var(--mute); line-height:1.35;"><code>sp_invoke_external_rest_endpoint</code> calls the model.</div>
+        </div>
+        <div style="border-left:2px solid var(--accent); padding:4px 0 4px 12px;">
+          <div class="eyebrow">Step 05</div>
+          <div style="font-weight:600; margin-top:4px;">Extract</div>
+          <div style="font-size:9.5pt; color:var(--mute); line-height:1.35;"><code>OPENJSON</code> + <code>JSON_VALUE</code> parse the response.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="doc-h2" style="margin-top:0;">Core concepts</h2>
+    <ul>
+      <li><b>Use cases.</b> Customer‑support bots grounded in product docs, internal knowledge search, report summarization, SQL natural‑language interfaces.</li>
+      <li><b><code>sp_invoke_external_rest_endpoint</code>.</b> The T‑SQL stored procedure for calling external REST APIs (including Azure OpenAI). Sends prompts, receives completions.</li>
+      <li><b>Structured data → JSON.</b> Convert query results to JSON (<code>FOR JSON PATH/AUTO</code>, <code>JSON_OBJECT</code>, <code>JSON_ARRAY</code>) to include as context in the prompt.</li>
+      <li><b>Send results to the LLM.</b> System message + retrieved context + user question. Call the model via <code>sp_invoke_external_rest_endpoint</code>.</li>
+      <li><b>Extract responses.</b> Parse the JSON response — <code>OPENJSON</code> and <code>JSON_VALUE</code> pull out the generated text.</li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="row"><span class="if">If →</span><span class="then">users search by product name and expect exact matches → <b>Full‑Text Search</b>.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">users describe what they want in natural language ("comfortable running shoes for flat feet") → <b>Vector Search</b> over description embeddings.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">you need both keyword precision and semantic recall → <b>Hybrid Search with RRF</b>.</span></div>
+      <div class="row"><span class="if">If →</span><span class="then">the dataset has 1M+ rows and needs sub‑second search → <b>ANN with a vector index</b>. ENN would be too slow.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>04 · RAG</span><span class="rule"></span><span>11 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 12 · service comparison =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 05</span><span>Service comparison tables</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">05</span><span>Service comparison tables</span></div>
+    <h1 class="doc-h1">Choose the right <em class="q">platform.</em></h1>
+
+    <h2 class="doc-h2" style="margin-top:10px;">SQL platform comparison</h2>
+    <table class="data">
+      <thead><tr><th>Feature</th><th>SQL Server <span class="eyebrow">· on‑prem</span></th><th>Azure SQL Database</th><th>SQL DB in Fabric</th></tr></thead>
+      <tbody>
+        <tr><td>Deployment</td><td>Self‑managed VM / bare metal</td><td>Fully managed PaaS</td><td>Fabric workspace</td></tr>
+        <tr><td>Scaling</td><td>Manual — add CPU/RAM</td><td>DTU or vCore auto‑scale</td><td>Fabric capacity units</td></tr>
+        <tr><td>AI integration</td><td>External REST calls</td><td>Native + REST endpoints</td><td>Deep Fabric AI/ML</td></tr>
+        <tr><td>Copilot</td><td>GitHub Copilot in IDE</td><td>GitHub Copilot + portal</td><td>Copilot in Fabric</td></tr>
+        <tr><td>Graph tables</td><td><span class="badge ok">yes</span></td><td><span class="badge ok">yes</span></td><td><span class="badge ok">yes</span></td></tr>
+        <tr><td>Ledger tables</td><td><span class="badge ok">2022+</span></td><td><span class="badge ok">yes</span></td><td><span class="badge ok">yes</span></td></tr>
+        <tr><td>Vector support</td><td><span class="badge mid">preview</span></td><td><span class="badge mid">preview / GA</span></td><td><span class="badge mid">preview / GA</span></td></tr>
+        <tr><td>CI/CD</td><td>SQL Database Projects</td><td>SQL Database Projects</td><td>Fabric Git integration</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">Encryption methods</h2>
+    <table class="data">
+      <thead><tr><th>Method</th><th>Key location</th><th>Server can read?</th><th>Use case</th></tr></thead>
+      <tbody>
+        <tr><td><b>Always Encrypted</b></td><td>Client only</td><td><span class="badge ok">no</span></td><td>Protect from DBAs &amp; cloud admins</td></tr>
+        <tr><td><b>AE + Enclaves</b></td><td>Secure enclave</td><td>In enclave only</td><td>AE + range queries, LIKE</td></tr>
+        <tr><td><b>Column‑level (T‑SQL)</b></td><td>Database</td><td><span class="badge no">yes</span></td><td>Flexible server‑side processing</td></tr>
+        <tr><td><b>TDE</b></td><td>Server / HSM</td><td>Yes (data at rest)</td><td>Full‑database at‑rest encryption</td></tr>
+        <tr><td><b>Dynamic Data Masking</b></td><td>N/A — no encryption</td><td><span class="badge no">yes</span></td><td>Presentation‑layer obfuscation</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="doc-h2">Data API Builder vs. custom API</h2>
+    <table class="data">
+      <thead><tr><th>Aspect</th><th>Data API Builder</th><th>Custom API <span class="eyebrow">· App Service / Functions</span></th></tr></thead>
+      <tbody>
+        <tr><td>Code required</td><td>Zero — config‑driven</td><td>Full application code</td></tr>
+        <tr><td>Protocols</td><td>REST + GraphQL</td><td>Any</td></tr>
+        <tr><td>Setup time</td><td>Minutes</td><td>Hours to days</td></tr>
+        <tr><td>Customization</td><td>Limited (config options)</td><td>Unlimited</td></tr>
+        <tr><td>Auth</td><td>Entra ID, API keys</td><td>Any auth provider</td></tr>
+        <tr><td>Best for</td><td>Standard CRUD over DB objects</td><td>Complex business logic</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="runfoot"><span>05 · Comparison</span><span class="rule"></span><span>12 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 13 · PITFALLS =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 06</span><span>Common pitfalls</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">06</span><span>Common pitfalls &amp; distractor answers</span></div>
+    <h1 class="doc-h1">Plausible, but <em class="q">wrong.</em></h1>
+    <p style="max-width:5.4in; color:var(--ink-2); margin-bottom:8px;">The exam uses plausible‑sounding options to test depth of understanding. Below are the twelve most common traps — read each distractor, then the correction.</p>
+
+    <div class="pit">
+      <div class="n">01</div>
+      <div>
+        <div class="claim">Dynamic Data Masking protects data from admins.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">DDM is presentation‑layer only. Users with <code>UNMASK</code> or <code>db_owner</code> see real data. For true protection use <b>Always Encrypted</b>.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">02</div>
+      <div>
+        <div class="claim">Temporal tables provide tamper‑proof audit.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Admins can modify history tables. For tamper‑evidence use <b>Ledger tables</b> with cryptographic hashes.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">03</div>
+      <div>
+        <div class="claim">Multi‑statement TVFs perform like inline TVFs.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Multi‑statement TVFs have fixed cardinality estimates and prevent optimizer push‑down. <b>Inline TVFs</b> are expanded like views.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">04</div>
+      <div>
+        <div class="claim">IDENTITY is always better than SEQUENCE.</div>
+        <div><span class="verdict">Wrong</span><span class="truth"><b>SEQUENCE</b> generates values before <code>INSERT</code> and works across multiple tables. <code>IDENTITY</code> is table‑bound.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">05</div>
+      <div>
+        <div class="claim">ENN is preferred for production.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">ENN scans all vectors — too slow for large datasets. Use <b>ANN with a vector index</b> for production.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">06</div>
+      <div>
+        <div class="claim">CDC and Change Tracking are interchangeable.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">CDC captures full before/after images; Change Tracking only tells you <i>which</i> rows changed. CDC is heavier but richer.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">07</div>
+      <div>
+        <div class="claim">SNAPSHOT isolation has no cost.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">SNAPSHOT uses row versioning in <code>tempdb</code> — I/O and space cost. Prevents blocking but not write‑write conflicts.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">08</div>
+      <div>
+        <div class="claim">Always Encrypted supports all query operations.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Standard AE supports equality only (deterministic) or no comparisons (randomized). Use <b>Enclaves</b> for range / LIKE.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">09</div>
+      <div>
+        <div class="claim">Vector indexes are required for vector search.</div>
+        <div><span class="verdict">Wrong</span><span class="truth"><code>VECTOR_DISTANCE</code> works without an index (ENN). Indexes enable ANN for performance, but are not mandatory.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">10</div>
+      <div>
+        <div class="claim">Triggers are the best way to maintain embeddings.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Triggers are synchronous and slow writes. For high‑throughput tables use async methods — <b>CDC + Functions, CES</b>.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">11</div>
+      <div>
+        <div class="claim">RRF replaces the need for both search types.</div>
+        <div><span class="verdict">Wrong</span><span class="truth">Reciprocal Rank Fusion <i>merges</i> results from full‑text AND vector search. You still need both implementations; RRF combines them.</span></div>
+      </div>
+    </div>
+    <div class="pit">
+      <div class="n">12</div>
+      <div>
+        <div class="claim">JSON_VALUE can return entire objects.</div>
+        <div><span class="verdict">Wrong</span><span class="truth"><code>JSON_VALUE</code> returns scalars only. Use <code>OPENJSON</code> or <code>JSON_QUERY</code> to extract objects or arrays.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>06 · Pitfalls</span><span class="rule"></span><span>13 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 14 · CHECKLIST =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · 07</span><span>Final checklist</span></div>
+  <div class="page-body" style="padding-top:18px;">
+    <div class="section-rule"><span class="idx">07</span><span>Night‑before review · 20 must‑know items</span></div>
+    <h1 class="doc-h1">Twenty things you must <em class="q">know.</em></h1>
+    <p style="max-width:5.4in; color:var(--ink-2); margin-bottom:14px;">Review the night before. If any item feels unfamiliar, revisit that topic in the guide before going to bed.</p>
+
+    <div class="check-grid">
+      <div class="check-item"><span class="box"></span><span class="n">01</span><span class="t">You can explain when to use <b>temporal vs. ledger vs. graph vs. in‑memory</b> tables.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">02</span><span class="t">You can write a <b>recursive CTE</b> for hierarchical data.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">03</span><span class="t">You know all JSON functions: <code>JSON_OBJECT</code>, <code>JSON_ARRAY</code>, <code>JSON_ARRAYAGG</code>, <code>OPENJSON</code>, <code>JSON_VALUE</code>, <code>JSON_CONTAINS</code>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">04</span><span class="t">You can use <b>window functions</b> — <code>ROW_NUMBER</code>, <code>RANK</code>, <code>LAG</code>/<code>LEAD</code>, running <code>SUM</code>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">05</span><span class="t">You understand the new <b>regex functions</b> (<code>REGEXP_LIKE</code>, <code>REGEXP_REPLACE</code>, …) and can write basic patterns.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">06</span><span class="t">You know the difference between <code>EDIT_DISTANCE</code> and <code>JARO_WINKLER_DISTANCE</code>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">07</span><span class="t">You can write a <b>graph <code>MATCH</code></b> query.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">08</span><span class="t">You can configure <b>GitHub Copilot instruction files</b> and MCP server endpoints.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">09</span><span class="t">You understand <b>Always Encrypted</b> (standard vs. enclaves) and when to use each.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">10</span><span class="t">You can implement <b>Dynamic Data Masking</b> <i>and</i> explain its limitations.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">11</span><span class="t">You can implement <b>Row‑Level Security</b> with filter and block predicates.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">12</span><span class="t">You can read a <b>query execution plan</b> and identify key lookups, scans, implicit conversions.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">13</span><span class="t">You can explain all five <b>transaction isolation levels</b> and their trade‑offs.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">14</span><span class="t">You can diagnose <b>blocking and deadlocks</b> using DMVs.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">15</span><span class="t">You understand <b>SQL Database Projects</b>, schema drift, and CI/CD pipeline controls.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">16</span><span class="t">You can configure <b>Data API Builder</b> for REST and GraphQL endpoints.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">17</span><span class="t">You know the differences between <b>CDC, Change Tracking, CES</b>, and SQL trigger bindings.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">18</span><span class="t">You can design an <b>embedding pipeline</b> — columns, chunking, generation, maintenance.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">19</span><span class="t">You understand <b>ANN vs. ENN</b>, vector indexes, and <code>VECTOR_DISTANCE</code> / <code>VECTOR_SEARCH</code>.</span></div>
+      <div class="check-item"><span class="box"></span><span class="n">20</span><span class="t">You can implement end‑to‑end <b>RAG</b> — embed query → vector search → build prompt → call LLM → parse response.</span></div>
+    </div>
+  </div>
+  <div class="runfoot"><span>07 · Checklist</span><span class="rule"></span><span>14 / 15</span></div>
+</section>
+
+<!-- =================== PAGE 15 · CLOSER =================== -->
+<section class="page">
+  <div class="runhead"><span class="brand">DP‑800 · Colophon</span><span>Closing</span></div>
+  <div class="page-body closer">
+    <div class="eyebrow" style="margin-bottom:14px;">— Good luck</div>
+    <div class="big">
+      Focus on scenario‑based <em>reasoning:</em> understand not just what each technology does, but <em>when</em> and <em>why</em> you would choose it over the alternatives.
+    </div>
+
+    <div style="margin-top:48px; display:grid; grid-template-columns:1fr; gap:40px; width:100%; max-width:6.5in;">
+      <div>
+        <div class="eyebrow">Source</div>
+        <p style="margin-top:6px; font-size:10pt;">Microsoft Learn — Study Guide for Exam DP‑800.</p>
+      </div>
+      
+    </div>
+
+    <div class="sign">End of guide · DP‑800</div>
+  </div>
+  <div class="runfoot"><span>DP‑800</span><span class="rule"></span><span>15 / 15</span></div>
+</section>
+
+<script>
+  // page-setup for proper printing to PDF at Letter size
+  const style = document.createElement('style');
+  style.textContent = `@page { size: Letter; margin: 0; }`;
+  document.head.appendChild(style);
+</script>
+</body>
+</html>

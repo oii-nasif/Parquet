@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Parquet — The Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4efe3;
+    --paper-2: #ebe4d3;
+    --ink: #1a1814;
+    --ink-2: #3a3630;
+    --ink-3: #6b6558;
+    --ink-4: #938c7d;
+    --rule: #c9c0ad;
+    --rule-2: #d8d0bd;
+    --accent: oklch(0.48 0.09 40);    /* warm sepia/terracotta */
+    --accent-2: oklch(0.48 0.06 160); /* muted sage */
+    --accent-soft: oklch(0.92 0.03 40);
+    --sans: 'Public Sans', system-ui, sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  body {
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(0,0,0,0.015) 1px, transparent 1px),
+      radial-gradient(circle at 70% 60%, rgba(0,0,0,0.012) 1px, transparent 1px);
+    background-size: 3px 3px, 5px 5px;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    max-width: 1120px; margin: 0 auto; padding: 28px 48px 0;
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1px solid var(--ink); padding-bottom: 18px;
+  }
+  .wordmark { font-family: var(--serif); font-weight: 700; font-size: 28px; letter-spacing: -0.01em; font-style: italic; }
+  .wordmark .amp { font-style: italic; color: var(--accent); padding: 0 2px; }
+  .meta-nav { display: flex; gap: 22px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .meta-nav a { padding: 2px 0; border-bottom: 1px solid transparent; }
+  .meta-nav a:hover { border-bottom-color: var(--ink); color: var(--ink); }
+
+  /* ---------- Hero / Title block ---------- */
+  .hero { max-width: 1120px; margin: 0 auto; padding: 40px 48px 28px; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .hero h1 { font-family: var(--serif); font-weight: 300; font-size: 72px; line-height: 0.98; letter-spacing: -0.025em; color: var(--ink); font-variation-settings: 'opsz' 60; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+  .hero-deck { margin-top: 18px; font-family: var(--serif); font-size: 19px; line-height: 1.55; color: var(--ink-2); max-width: 52ch; font-weight: 300; }
+  .hero-deck .drop { font-size: 22px; font-weight: 500; }
+  .hero-side { border-left: 1px solid var(--rule); padding-left: 32px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero-side .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 8px; }
+  .exam-card { padding: 18px 0; border-bottom: 1px solid var(--rule-2); }
+  .exam-card:last-child { border-bottom: none; }
+  .exam-card .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; }
+  .exam-card .v { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); margin-top: 2px; }
+  .exam-card .v em { font-style: italic; color: var(--accent); font-weight: 400; }
+
+  /* ---------- Stats ribbon ---------- */
+  .ribbon { max-width: 1120px; margin: 0 auto; padding: 22px 48px; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  .ribbon .stat { padding: 0 24px; border-right: 1px solid var(--rule-2); }
+  .ribbon .stat:first-child { padding-left: 0; }
+  .ribbon .stat:last-child { border-right: none; padding-right: 0; }
+  .ribbon .stat .n { font-family: var(--serif); font-size: 36px; font-weight: 400; letter-spacing: -0.02em; line-height: 1; font-variation-settings: 'opsz' 60; }
+  .ribbon .stat .n small { font-size: 18px; color: var(--ink-4); font-weight: 300; }
+  .ribbon .stat .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+
+  /* ---------- Recommended strip ---------- */
+  .recommend { max-width: 1120px; margin: 0 auto; padding: 28px 48px; display: grid; grid-template-columns: 180px 1fr auto; gap: 36px; align-items: center; border-bottom: 1px solid var(--rule); }
+  .recommend .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+  .recommend .body { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.35; }
+  .recommend .body .q-num { color: var(--ink-4); font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; padding-right: 10px; }
+  .recommend .body em { font-style: italic; color: var(--accent); }
+  .btn-pick { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 22px; background: var(--ink); color: var(--paper); border: none; cursor: pointer; white-space: nowrap; }
+  .btn-pick:hover { background: var(--accent); }
+
+  /* ---------- Section heading ---------- */
+  .section-head { max-width: 1120px; margin: 56px auto 0; padding: 0 48px 16px; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--ink); }
+  .section-head h2 { font-family: var(--serif); font-weight: 400; font-size: 34px; letter-spacing: -0.015em; font-style: italic; }
+  .section-head h2::before { content: attr(data-num) '.'; font-family: var(--mono); font-style: normal; font-size: 14px; color: var(--accent); padding-right: 16px; vertical-align: top; letter-spacing: 0.1em; }
+  .section-head .tools { display: flex; gap: 12px; align-items: center; }
+  .search {
+    font-family: var(--sans); font-size: 13px; padding: 8px 14px 8px 32px; background: transparent; border: 1px solid var(--rule); border-radius: 0;
+    width: 280px; color: var(--ink);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b6558' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><path d='m21 21-4.3-4.3'/></svg>");
+    background-repeat: no-repeat; background-position: 10px center;
+  }
+  .search:focus { outline: none; border-color: var(--ink); }
+  .search-results {
+    position: absolute; background: var(--paper); border: 1px solid var(--ink); width: 420px; max-height: 360px; overflow-y: auto;
+    margin-top: 6px; z-index: 50; box-shadow: 4px 4px 0 var(--ink);
+    display: none;
+  }
+  .search-wrap { position: relative; }
+  .search-result { padding: 10px 14px; border-bottom: 1px solid var(--rule-2); cursor: pointer; font-size: 13px; }
+  .search-result:hover { background: var(--paper-2); }
+  .search-result .sr-meta { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+  .search-result .sr-q { font-family: var(--serif); margin-top: 2px; line-height: 1.35; }
+
+  /* ---------- Chapter grid ---------- */
+  .grid {
+    max-width: 1120px; margin: 0 auto; padding: 36px 48px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    border-left: 1px solid var(--rule-2);
+  }
+  .chapter {
+    border-right: 1px solid var(--rule-2);
+    border-bottom: 1px solid var(--rule-2);
+    padding: 26px 24px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative;
+    min-height: 220px;
+    transition: background 0.15s;
+  }
+  .chapter:hover { background: var(--paper-2); }
+  .chapter:hover .ch-num { color: var(--accent); }
+  .chapter.featured { background: var(--accent-soft); }
+  .chapter .ch-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .chapter .ch-num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--ink-3); }
+  .chapter .ch-status { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); }
+  .chapter .ch-status.attempted { color: var(--accent-2); }
+  .chapter .ch-status.mastered { color: var(--accent); font-weight: 500; }
+  .chapter h3 { font-family: var(--serif); font-size: 24px; font-weight: 400; line-height: 1.15; letter-spacing: -0.01em; color: var(--ink); }
+  .chapter h3 em { font-style: italic; }
+  .chapter .ch-sub { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); font-weight: 300; }
+  .chapter .ch-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px dashed var(--rule-2); }
+  .chapter .ch-score { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; }
+  .chapter .ch-score .pct { color: var(--ink); font-weight: 500; font-size: 13px; }
+  .chapter .ch-score.none { color: var(--ink-4); font-style: italic; font-family: var(--serif); letter-spacing: 0; }
+  .chapter .ch-arrow { font-family: var(--serif); font-size: 22px; color: var(--ink-3); font-style: italic; }
+  .chapter:hover .ch-arrow { color: var(--accent); transform: translateX(3px); }
+  .chapter .ch-arrow { transition: transform 0.2s, color 0.15s; }
+
+  /* bar under score */
+  .ch-bar { height: 2px; background: var(--rule-2); margin-top: 10px; position: relative; overflow: hidden; }
+  .ch-bar > div { height: 100%; background: var(--accent); transition: width 0.4s; }
+  .ch-bar.high > div { background: var(--accent-2); }
+
+  /* ---------- Special cards (Random 50 + Bookmarks) ---------- */
+  .special-strip { max-width: 1120px; margin: 24px auto 0; padding: 0 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .special {
+    border: 1px solid var(--ink); padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative; overflow: hidden;
+  }
+  .special.dark { background: var(--ink); color: var(--paper); }
+  .special.dark .eyebrow { color: oklch(0.75 0.09 40); }
+  .special h3 { font-family: var(--serif); font-size: 32px; font-weight: 400; letter-spacing: -0.01em; }
+  .special h3 em { font-style: italic; }
+  .special p { font-family: var(--serif); font-size: 16px; color: var(--ink-3); font-weight: 300; line-height: 1.5; max-width: 42ch; }
+  .special.dark p { color: oklch(0.8 0.02 40); }
+  .special .go { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 10px; padding: 10px 0; border-top: 1px solid currentColor; display: flex; justify-content: space-between; align-items: center; }
+  .special.dark .go { border-top-color: oklch(0.5 0.02 40); }
+
+  /* ---------- Topic map ---------- */
+  .topics {
+    max-width: 1120px; margin: 56px auto 0; padding: 0 48px;
+  }
+  .topic-map {
+    margin-top: 24px; border: 1px solid var(--rule);
+    padding: 0; display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .topic {
+    padding: 20px 22px; border-right: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .topic:nth-child(4n) { border-right: none; }
+  .topic .t-name { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--ink); }
+  .topic .t-count { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .topic .t-bar { height: 3px; background: var(--rule-2); position: relative; margin-top: 6px; }
+  .topic .t-bar > div { height: 100%; background: var(--accent); }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    max-width: 1120px; margin: 80px auto 0; padding: 28px 48px 48px;
+    border-top: 1px solid var(--ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .footer .colophon { font-family: var(--serif); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--ink-3); }
+  .footer .reset { color: var(--ink-4); cursor: pointer; background: none; border: none; font: inherit; letter-spacing: 0.1em; }
+  .footer .reset:hover { color: var(--accent); }
+
+  /* ---------- Drop cap bit ---------- */
+  .dropcap {
+    float: left; font-family: var(--serif); font-size: 64px; line-height: 0.85;
+    padding: 4px 10px 0 0; color: var(--accent); font-weight: 400;
+    font-variation-settings: 'opsz' 60;
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wordmark"><em>Par</em>quet</div>
+  <nav class="meta-nav">
+    <a href="#chapters">Chapters</a>
+    <a href="#topics">Topics</a>
+    <a href="#exam">Exam</a>
+    <a href="#bookmarks">Bookmarks</a>
+  </nav>
+</div>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">DP-700 · Study Guide</div>
+    <h1>A patient<br/>companion<br/>for the <em>Fabric</em> exam.</h1>
+    <p class="hero-deck"><span class="drop">Seven hundred questions</span>, annotated and arranged into fourteen chapters — from workspace foundations to real-time intelligence. Track what you've read; revisit what you haven't.</p>
+  </div>
+  <aside class="hero-side">
+    <div class="label">Exam at a glance</div>
+    <div class="exam-card">
+      <div class="k">CERTIFICATION</div>
+      <div class="v">DP-700 · <em>Data Engineer</em></div>
+    </div>
+    <div class="exam-card">
+      <div class="k">PASSING SCORE</div>
+      <div class="v">700 <small>of 1000</small></div>
+    </div>
+    <div class="exam-card">
+      <div class="k">DURATION &middot; QUESTIONS</div>
+      <div class="v">100 min · 40–60</div>
+    </div>
+    <div class="exam-card">
+      <div class="k">DOMAINS</div>
+      <div class="v"><em>Implement</em> · <em>Ingest</em> · <em>Monitor</em></div>
+    </div>
+  </aside>
+</header>
+
+<div class="ribbon" id="ribbon">
+  <div class="stat"><div class="n" id="statAttempts">0</div><div class="l">Attempts logged</div></div>
+  <div class="stat"><div class="n" id="statAvg">—<small>%</small></div><div class="l">Mean accuracy</div></div>
+  <div class="stat"><div class="n" id="statBest">—<small>%</small></div><div class="l">Personal best</div></div>
+  <div class="stat"><div class="n" id="statCovered">0<small>/14</small></div><div class="l">Chapters opened</div></div>
+  <div class="stat"><div class="n" id="statBookmarks">0</div><div class="l">Bookmarked</div></div>
+</div>
+
+<section class="recommend" id="recommend">
+  <div class="tag">Recommended reading</div>
+  <div class="body" id="recommendBody">
+    <span class="q-num">Ch. I</span>Begin with the <em>Online Dumps</em> — the exam's own voice.
+  </div>
+  <a href="quiz.html?q=0" class="btn-pick" id="recommendBtn">Open →</a>
+</section>
+
+<div class="section-head" id="chapters">
+  <h2 data-num="I">The Chapters</h2>
+  <div class="tools">
+    <div class="search-wrap">
+      <input class="search" id="search" placeholder="Search 700 questions…" autocomplete="off"/>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid" id="chapterGrid"></div>
+
+<div class="special-strip">
+  <a class="special dark" href="quiz.html?q=random">
+    <div class="eyebrow">Practice mode</div>
+    <h3>The <em>Random Fifty</em></h3>
+    <p>Fifty questions drawn at random from every chapter — a mock of what you've covered so far. Refreshes on every visit.</p>
+    <div class="go"><span>Start practice</span><span>→</span></div>
+  </a>
+  <a class="special" href="#bookmarks" id="bookmarksCard">
+    <div class="eyebrow" style="color: var(--accent);">For later</div>
+    <h3>Your <em>margin notes</em></h3>
+    <p id="bookmarkCopy">Flag questions while you study and they'll collect here. Revisit them before exam day.</p>
+    <div class="go"><span id="bookmarkCount">0 bookmarks</span><span>→</span></div>
+  </a>
+</div>
+
+<section class="topics" id="topics">
+  <div class="section-head" style="margin: 56px 0 0; padding: 0 0 16px;">
+    <h2 data-num="II">The Topic Map</h2>
+    <div style="font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3);">where the 700 questions actually live</div>
+  </div>
+  <div class="topic-map" id="topicMap"></div>
+</section>
+
+<footer class="footer" id="exam">
+  <div class="colophon">Set in Source Serif 4 & Public Sans. Bound locally in your browser.</div>
+  <button class="reset" id="resetBtn">Reset progress</button>
+</footer>
+
+<script src="shared/fabricprep-core.js"></script>
+<script>
+const FP = window.FabricPrep;
+const state = FP.loadState();
+const stats = FP.overallStats();
+
+// --- Stats ribbon ---
+document.getElementById('statAttempts').textContent = stats.totalAttempts;
+document.getElementById('statAvg').innerHTML = stats.avgPct ? (stats.avgPct + '<small>%</small>') : '—<small>%</small>';
+document.getElementById('statBest').innerHTML = stats.bestPct ? (stats.bestPct + '<small>%</small>') : '—<small>%</small>';
+document.getElementById('statCovered').innerHTML = stats.quizzesAttempted + '<small>/14</small>';
+document.getElementById('statBookmarks').textContent = stats.bookmarks;
+
+// --- Bookmarks card copy ---
+document.getElementById('bookmarkCount').textContent = stats.bookmarks + ' bookmark' + (stats.bookmarks===1?'':'s');
+if(stats.bookmarks > 0){
+  document.getElementById('bookmarkCopy').textContent = 'You have ' + stats.bookmarks + ' question' + (stats.bookmarks===1?'':'s') + ' set aside. Open the review page to go through them together.';
+}
+
+// --- Recommend ---
+const rec = FP.recommendedNext();
+const recNum = toRoman(rec.quiz.id + 1);
+const recBody = document.getElementById('recommendBody');
+const recBtn = document.getElementById('recommendBtn');
+recBtn.href = rec.quiz.href;
+if(rec.reason === 'retake'){
+  recBody.innerHTML = '<span class="q-num">Ch. ' + recNum + '</span>Return to <em>' + rec.quiz.label + '</em> — your best was ' + rec.pct + '%. Try for a cleaner run.';
+  recBtn.textContent = 'Retake →';
+} else if(rec.reason === 'next'){
+  recBody.innerHTML = '<span class="q-num">Ch. ' + recNum + '</span>Next on your reading list: <em>' + rec.quiz.label + '</em> — ' + rec.quiz.sub + '.';
+  recBtn.textContent = 'Begin →';
+} else {
+  recBody.innerHTML = '<span class="q-num">Ch. ' + recNum + '</span>You\'ve opened every chapter. Revisit <em>' + rec.quiz.label + '</em> to keep it fresh.';
+  recBtn.textContent = 'Revisit →';
+}
+
+// --- Chapter grid ---
+function toRoman(n){
+  const map = [['X',10],['IX',9],['V',5],['IV',4],['I',1]];
+  let s = '';
+  for(const [c,v] of map){ while(n >= v){ s += c; n -= v; } }
+  return s;
+}
+
+const grid = document.getElementById('chapterGrid');
+FP.QUIZ_META.forEach((q, idx) => {
+  const s = FP.quizStats(q.id);
+  const pct = s.best ? s.best.pct : null;
+  const mastered = pct !== null && pct >= 85;
+  const attempted = s.attempts > 0;
+  const status = mastered ? 'mastered' : (attempted ? 'attempted' : 'unread');
+  const statusTxt = mastered ? '✓ Mastered' : (attempted ? 'In progress' : 'Unread');
+  const a = document.createElement('a');
+  a.href = q.href;
+  a.className = 'chapter' + (q.id === 0 ? ' featured' : '');
+  a.innerHTML = `
+    <div class="ch-head">
+      <span class="ch-num">CH. ${toRoman(idx+1)} · ${String(q.id).padStart(2,'0')}</span>
+      <span class="ch-status ${status}">${statusTxt}</span>
+    </div>
+    <h3>${q.id===0?'<em>Online Dumps</em>':q.label}</h3>
+    <div class="ch-sub">${q.sub}</div>
+    <div class="ch-foot">
+      <div class="ch-score ${attempted?'':'none'}">${attempted ? 'Best <span class="pct">' + pct + '%</span> · ' + s.attempts + ' attempt' + (s.attempts===1?'':'s') : 'Not yet opened'}</div>
+      <div class="ch-arrow">→</div>
+    </div>
+    ${attempted ? `<div class="ch-bar ${pct>=85?'high':''}"><div style="width:${pct}%"></div></div>` : ''}
+  `;
+  grid.appendChild(a);
+});
+
+// --- Topic map: placeholder topic distribution ---
+const TOPICS = [
+  { name: 'Lakehouse & Delta',    count: 92, pct: 78 },
+  { name: 'Data pipelines',       count: 71, pct: 65 },
+  { name: 'Spark notebooks',      count: 58, pct: 48 },
+  { name: 'Dataflows Gen2',       count: 44, pct: 40 },
+  { name: 'Warehouse & T-SQL',    count: 63, pct: 55 },
+  { name: 'KQL & eventhouse',     count: 51, pct: 62 },
+  { name: 'Eventstreams',         count: 38, pct: 50 },
+  { name: 'Security (RLS/DDM)',   count: 47, pct: 70 },
+  { name: 'Governance & domains', count: 29, pct: 35 },
+  { name: 'CI/CD & Git',          count: 41, pct: 58 },
+  { name: 'Monitoring',           count: 35, pct: 45 },
+  { name: 'Capacity & perf',      count: 33, pct: 52 },
+];
+const topicMap = document.getElementById('topicMap');
+TOPICS.forEach(t => {
+  const d = document.createElement('div');
+  d.className = 'topic';
+  d.innerHTML = `
+    <div class="t-name">${t.name}</div>
+    <div class="t-count">${t.count} questions · ${t.pct}% of pool</div>
+    <div class="t-bar"><div style="width:${t.pct}%"></div></div>
+  `;
+  topicMap.appendChild(d);
+});
+
+// --- Search across a lightweight index (first quiz's questions for demo; extend later) ---
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('searchResults');
+let SEARCH_INDEX = null;
+
+function grabQuestions(){ try { return (0, eval)('typeof QUESTIONS !== "undefined" ? QUESTIONS : []'); } catch(e){ return []; } }
+async function buildSearchIndex(){
+  if(SEARCH_INDEX) return SEARCH_INDEX;
+  SEARCH_INDEX = [];
+  for(let i = 0; i < FP.QUIZ_COUNT; i++){
+    try {
+      await loadQuizFile(i);
+      grabQuestions().forEach(q => {
+        SEARCH_INDEX.push({ quizId: i, num: q.num, question: q.question, sub: q.subtopic });
+      });
+    } catch(e){}
+  }
+  return SEARCH_INDEX;
+}
+function loadQuizFile(i){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = `questions/questions_${i}.js`;
+    s.onload = () => res();
+    s.onerror = () => rej();
+    document.head.appendChild(s);
+  });
+}
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  const val = searchInput.value.trim().toLowerCase();
+  if(val.length < 3){ searchResults.style.display='none'; return; }
+  searchTimer = setTimeout(async () => {
+    const idx = await buildSearchIndex();
+    const hits = idx.filter(q => q.question.toLowerCase().includes(val)).slice(0, 20);
+    if(!hits.length){ searchResults.innerHTML = '<div class="search-result" style="color:var(--ink-4);font-style:italic;">No matches in 700 questions</div>'; searchResults.style.display='block'; return; }
+    searchResults.innerHTML = hits.map(h => `
+      <a class="search-result" href="quiz.html?q=${h.quizId}#q${h.num}">
+        <div class="sr-meta">Ch. ${toRoman(h.quizId+1)} · Q${h.num}</div>
+        <div class="sr-q">${escapeHtml(h.question.substring(0, 140))}${h.question.length>140?'…':''}</div>
+      </a>
+    `).join('');
+    searchResults.style.display = 'block';
+  }, 200);
+});
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.search-wrap')) searchResults.style.display = 'none';
+});
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// --- Reset ---
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(confirm('Clear all progress and bookmarks?')){ FP.clearAll(); location.reload(); }
+});
+</script>
+</body>
+</html>
