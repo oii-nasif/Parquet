@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Parquet — DP-700 Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4efe3;
+    --paper-warm: #f1ebe0;
+    --paper-dark: #e8e2d5;
+    --ink: #1a1814;
+    --ink-dim: #3a3630;
+    --ink-muted: #6b6558;
+    --ink-faint: #938c7d;
+    --rule: #c9c0ad;
+    --rule-light: #d8d0bd;
+    --accent: oklch(0.48 0.09 40);
+    --accent-warm: oklch(0.55 0.10 35);
+    --accent-sage: oklch(0.48 0.06 160);
+    --accent-glow: oklch(0.93 0.04 40);
+    --sans: 'Public Sans', system-ui, sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(74, 65, 52, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(107, 101, 88, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,0.01) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 4px 4px;
+    background-attachment: fixed;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ========== Layout Container ========== */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ========== Masthead ========== */
+  .masthead {
+    padding: 32px 0 24px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'opsz' 60;
+  }
+
+  .wordmark em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-left: 16px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  .nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .nav a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ========== Hero ========== */
+  .hero {
+    padding: 64px 0 48px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .hero-main {
+    padding-right: 32px;
+  }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: inline-block;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 68px;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-variation-settings: 'opsz' 60;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .hero-lede {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    font-weight: 300;
+    max-width: 54ch;
+  }
+
+  .hero-lede em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* Hero sidebar - exam info */
+  .hero-side {
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    padding: 28px 28px 24px;
+    position: relative;
+  }
+
+  .hero-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+
+  .side-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+  }
+
+  .exam-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-light);
+  }
+
+  .info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .info-key {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .info-val {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .info-val em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  /* ========== Stats Bar ========== */
+  .stats-bar {
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 0 12px;
+    border-right: 1px solid var(--rule-light);
+  }
+
+  .stat:last-child {
+    border-right: none;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1;
+    font-variation-settings: 'opsz' 60;
+    color: var(--ink);
+  }
+
+  .stat-num small {
+    font-size: 16px;
+    color: var(--ink-faint);
+    font-weight: 300;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+
+  /* ========== Recommendation ========== */
+  .recommendation {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .rec-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .rec-text {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .rec-text .chap-num {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 12px;
+    margin-right: 8px;
+  }
+
+  .rec-text em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .rec-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .rec-btn:hover {
+    background: var(--accent);
+  }
+
+  /* ========== Section Header ========== */
+  .section-header {
+    padding: 48px 0 20px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    font-variation-settings: 'opsz' 60;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 13px;
+    color: var(--accent);
+    margin-right: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ========== Chapter Grid ========== */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+
+  .chapter {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 24px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 180px;
+    position: relative;
+    background: var(--paper);
+    transition: all 0.2s ease;
+  }
+
+  .chapter:hover {
+    background: var(--paper-warm);
+  }
+
+  .chapter:hover .chapter-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .chapter.featured {
+    background: var(--accent-glow);
+  }
+
+  .chapter.featured:hover {
+    background: var(--paper-warm);
+  }
+
+  .chapter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .chapter-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+  }
+
+  .chapter-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .chapter-status.mastered {
+    color: var(--accent);
+  }
+
+  .chapter-status.attempted {
+    color: var(--accent-sage);
+  }
+
+  .chapter-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.3;
+    font-variation-settings: 'opsz' 60;
+  }
+
+  .chapter-title em {
+    font-style: italic;
+  }
+
+  .chapter-sub {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .chapter-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px dashed var(--rule-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chapter-score {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .chapter-score.none {
+    color: var(--ink-faint);
+    font-style: italic;
+    font-family: var(--serif);
+  }
+
+  .chapter-arrow {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--ink-faint);
+    font-style: italic;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  /* ========== Featured Cards ========== */
+  .featured-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin-top: 24px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+  }
+
+  .featured-card {
+    background: var(--paper);
+    padding: 32px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    transition: background 0.2s ease;
+  }
+
+  .featured-card:hover {
+    background: var(--paper-warm);
+  }
+
+  .featured-card.dark {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .featured-card.dark:hover {
+    background: #25221e;
+  }
+
+  .card-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .featured-card.dark .card-eyebrow {
+    color: oklch(0.7 0.08 40);
+  }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-variation-settings: 'opsz' 60;
+  }
+
+  .card-title em {
+    font-style: italic;
+  }
+
+  .featured-card.dark .card-title em {
+    color: oklch(0.7 0.10 40);
+  }
+
+  .card-desc {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    max-width: 44ch;
+  }
+
+  .featured-card.dark .card-desc {
+    color: oklch(0.75 0.02 60);
+  }
+
+  .card-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-top: 12px;
+    border-top: 1px solid currentColor;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  /* ========== Topics ========== */
+  .topics-section {
+    padding: 56px 0 48px;
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--rule);
+    border-top: none;
+  }
+
+  .topic {
+    padding: 18px 20px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .topic:nth-child(4n) {
+    border-right: none;
+  }
+
+  .topic-name {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .topic-meta {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .topic-bar {
+    height: 2px;
+    background: var(--rule-light);
+    position: relative;
+    margin-top: 4px;
+  }
+
+  .topic-bar > div {
+    height: 100%;
+    background: var(--accent);
+  }
+
+  /* ========== Footer ========== */
+  .footer {
+    padding: 32px 0 48px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .colophon {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+  }
+
+  .reset-btn:hover {
+    color: var(--accent);
+  }
+
+  /* ========== Animations ========== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  /* ========== Responsive ========== */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .topics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .topic:nth-child(2n) {
+      border-right: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .page {
+      padding: 0 24px;
+    }
+
+    .stats-bar {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat:nth-child(4), .stat:nth-child(5) {
+      border-top: 1px solid var(--rule-light);
+      padding-top: 16px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- Masthead -->
+<header class="masthead">
+  <div class="brand">
+    <div class="wordmark"><em>Par</em>quet</div>
+    <span class="tagline">Study Companion</span>
+  </div>
+  <nav class="nav">
+    <a href="#chapters">Chapters</a>
+    <a href="#topics">Topics</a>
+    <a href="#exam">Exam Info</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-main">
+    <span class="kicker">DP-700 · Microsoft Fabric</span>
+    <h1>A quiet<br/>companion<br/>for the <em>Fabric</em><br/>exam.</h1>
+    <p class="hero-lede">
+      <em>Seven hundred questions</em>, annotated and arranged into fourteen chapters. From workspace foundations to real-time intelligence. Track your progress, revisit what you've missed, and arrive prepared.
+    </p>
+  </div>
+  <aside class="hero-side">
+    <div class="side-label">Exam at a glance</div>
+    <div class="exam-info">
+      <div class="info-row">
+        <span class="info-key">Certification</span>
+        <span class="info-val">DP-700 <em>Data Engineer</em></span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Passing Score</span>
+        <span class="info-val">700 <small>of 1000</small></span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Duration</span>
+        <span class="info-val">100 minutes</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Questions</span>
+        <span class="info-val">40–60 items</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Domains</span>
+        <span class="info-val"><em>Implement</em> · <em>Ingest</em> · <em>Monitor</em></span>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat">
+    <div class="stat-num" id="statAttempts">0</div>
+    <div class="stat-label">Attempts</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="statAvg">—<small>%</small></div>
+    <div class="stat-label">Mean accuracy</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="statBest">—<small>%</small></div>
+    <div class="stat-label">Personal best</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="statCovered">0<small>/14</small></div>
+    <div class="stat-label">Chapters</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="statBookmarks">0</div>
+    <div class="stat-label">Bookmarks</div>
+  </div>
+</div>
+
+<!-- Recommendation -->
+<section class="recommendation" id="recommendation">
+  <span class="rec-tag">Recommended</span>
+  <span class="rec-text" id="recText">Begin with <em>Online Dumps</em> — the exam speaks first.</span>
+  <a href="quiz.html?q=0" class="rec-btn" id="recBtn">Open →</a>
+</section>
+
+<!-- Chapters -->
+<div class="section-header" id="chapters">
+  <h2 class="section-title"><span class="section-num">I.</span>The Chapters</h2>
+</div>
+
+<div class="chapter-grid" id="chapterGrid"></div>
+
+<!-- Featured Cards -->
+<div class="featured-cards">
+  <a href="quiz.html?q=random" class="featured-card dark">
+    <span class="card-eyebrow">Practice Mode</span>
+    <h3 class="card-title">The <em>Random Fifty</em></h3>
+    <p class="card-desc">Drawn fresh from every chapter. A printable mock for exam week. Refreshes on each visit.</p>
+    <span class="card-link"><span>Start practice</span><span>→</span></span>
+  </a>
+  <a href="#bookmarks" class="featured-card" id="bookmarksCard">
+    <span class="card-eyebrow" style="color: var(--accent);">For Later</span>
+    <h3 class="card-title">Your <em>Marginalia</em></h3>
+    <p class="card-desc" id="bmDesc">Flag questions as you go. They'll collect here for focused review before exam day.</p>
+    <span class="card-link"><span id="bmCount">0 bookmarks</span><span>→</span></span>
+  </a>
+</div>
+
+<!-- Topics -->
+<section class="topics-section" id="topics">
+  <div class="section-header">
+    <h2 class="section-title"><span class="section-num">II.</span>The Topic Map</h2>
+  </div>
+  <div class="topics-grid" id="topicsGrid"></div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="exam">
+  <div class="colophon">A study companion by Nasif Ishtiaque Islam.</div>
+  <button class="reset-btn" id="resetBtn">Reset progress</button>
+</footer>
+
+</div>
+
+<script src="shared/fabricprep-core.js"></script>
+<script>
+const FP = window.FabricPrep;
+const stats = FP.overallStats();
+
+// Stats
+document.getElementById('statAttempts').textContent = stats.totalAttempts;
+document.getElementById('statAvg').innerHTML = stats.avgPct ? stats.avgPct + '<small>%</small>' : '—<small>%</small>';
+document.getElementById('statBest').innerHTML = stats.bestPct ? stats.bestPct + '<small>%</small>' : '—<small>%</small>';
+document.getElementById('statCovered').innerHTML = stats.quizzesAttempted + '<small>/14</small>';
+document.getElementById('statBookmarks').textContent = stats.bookmarks;
+
+// Bookmarks
+document.getElementById('bmCount').textContent = stats.bookmarks + ' bookmark' + (stats.bookmarks === 1 ? '' : 's');
+if(stats.bookmarks > 0) {
+  document.getElementById('bmDesc').textContent = 'You have ' + stats.bookmarks + ' question' + (stats.bookmarks === 1 ? '' : 's') + ' saved for review.';
+}
+
+// Recommendation
+const rec = FP.recommendedNext();
+const recText = document.getElementById('recText');
+const recBtn = document.getElementById('recBtn');
+recBtn.href = rec.quiz.href;
+if(rec.reason === 'retake') {
+  recText.innerHTML = 'Return to <em>' + rec.quiz.label + '</em> — your best was ' + rec.pct + '%. Try for a cleaner run.';
+  recBtn.textContent = 'Retake →';
+} else if(rec.reason === 'next') {
+  recText.innerHTML = 'Next on your list: <em>' + rec.quiz.label + '</em> — ' + rec.quiz.sub + '.';
+  recBtn.textContent = 'Begin →';
+} else {
+  recText.innerHTML = 'You\'ve opened every chapter. Revisit <em>' + rec.quiz.label + '</em> to stay fresh.';
+  recBtn.textContent = 'Revisit →';
+}
+
+// Chapter Grid
+function toRoman(n) {
+  const map = [['X',10],['IX',9],['V',5],['IV',4],['I',1]];
+  let s = '';
+  for(const [c,v] of map) { while(n >= v) { s += c; n -= v; } }
+  return s;
+}
+
+const grid = document.getElementById('chapterGrid');
+FP.QUIZ_META.forEach((q, idx) => {
+  const s = FP.quizStats(q.id);
+  const pct = s.best ? s.best.pct : null;
+  const mastered = pct !== null && pct >= 85;
+  const attempted = s.attempts > 0;
+  const status = mastered ? 'mastered' : (attempted ? 'attempted' : '');
+  const statusTxt = mastered ? '✓ Mastered' : (attempted ? 'In progress' : 'Unread');
+
+  const a = document.createElement('a');
+  a.href = q.href;
+  a.className = 'chapter' + (q.id === 0 ? ' featured' : '');
+  a.innerHTML = `
+    <div class="chapter-header">
+      <span class="chapter-num">${toRoman(idx+1)} · ${String(q.id).padStart(2,'0')}</span>
+      <span class="chapter-status ${status}">${statusTxt}</span>
+    </div>
+    <div class="chapter-title">${q.id === 0 ? '<em>Online Dumps</em>' : q.label}</div>
+    ${q.sub ? `<div class="chapter-sub">${q.sub}</div>` : ''}
+    <div class="chapter-footer">
+      <span class="chapter-score ${attempted ? '' : 'none'}">${attempted ? 'Best ' + pct + '% · ' + s.attempts + ' attempt' + (s.attempts===1?'':'s') : 'Not yet opened'}</span>
+      <span class="chapter-arrow">→</span>
+    </div>
+  `;
+  grid.appendChild(a);
+});
+
+// Topics
+const TOPICS = [
+  { name: 'Lakehouse & Delta',    count: 92, pct: 78 },
+  { name: 'Data pipelines',       count: 71, pct: 65 },
+  { name: 'Spark notebooks',      count: 58, pct: 48 },
+  { name: 'Dataflows Gen2',       count: 44, pct: 40 },
+  { name: 'Warehouse & T-SQL',    count: 63, pct: 55 },
+  { name: 'KQL & eventhouse',     count: 51, pct: 62 },
+  { name: 'Eventstreams',         count: 38, pct: 50 },
+  { name: 'Security (RLS/DDM)',   count: 47, pct: 70 },
+  { name: 'Governance & domains', count: 29, pct: 35 },
+  { name: 'CI/CD & Git',          count: 41, pct: 58 },
+  { name: 'Monitoring',           count: 35, pct: 45 },
+  { name: 'Capacity & perf',      count: 33, pct: 52 },
+];
+
+const topicsGrid = document.getElementById('topicsGrid');
+TOPICS.forEach(t => {
+  const d = document.createElement('div');
+  d.className = 'topic';
+  d.innerHTML = `
+    <div class="topic-name">${t.name}</div>
+    <div class="topic-meta">${t.count} questions · ${t.pct}%</div>
+    <div class="topic-bar"><div style="width:${t.pct}%"></div></div>
+  `;
+  topicsGrid.appendChild(d);
+});
+
+// Reset
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(confirm('Clear all progress and bookmarks?')) { FP.clearAll(); location.reload(); }
+});
+</script>
+</body>
+</html>
