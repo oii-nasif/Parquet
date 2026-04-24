@@ -1,0 +1,5 @@
+// Chapter 12: Power BI Integration - Reports & Analytics
+const QUESTIONS = [
+  {"num": 1, "question": "Which authentication method allows Power BI to access Fabric data sources using the user's credentials?", "options": ["A. Service principal", "B. Single sign-on (SSO)", "C. Managed identity", "D. Basic authentication"], "answer": "B", "explanation": "Single sign-on passes the user's credentials through to the underlying data source, enforcing row-level security based on their permissions. This provides per-user data access control."},
+  {"num": 2, "question": "What is the primary benefit of using Direct Lake for Power BI reports on Fabric lakehouses?", "options": ["A. Faster data loading", "B. No data refresh needed", "C. Automatic schema sync", "D. Lower storage costs"], "answer": "A", "explanation": "Direct Lake reads Parquet files directly without loading data into the dataset, significantly improving load times for large datasets. It still requires refresh for metadata changes."}
+];
