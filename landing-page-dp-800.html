@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DP-800 Interactive Quizzes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4efe3;
+    --paper-warm: #f1ebe0;
+    --ink: #1a1814;
+    --ink-dim: #3a3630;
+    --ink-muted: #6b6558;
+    --ink-faint: #938c7d;
+    --rule: #c9c0ad;
+    --accent-blue: oklch(0.55 0.12 250);
+    --accent-glow: oklch(0.93 0.04 250);
+    --sans: 'Public Sans', system-ui, sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(107, 101, 88, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,0.01) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 4px 4px;
+    background-attachment: fixed;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* Masthead */
+  .masthead {
+    padding: 32px 0 24px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .wordmark em { font-style: italic; color: var(--accent-blue); }
+
+  .tagline {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-left: 16px;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 48px 0 32px;
+    text-align: center;
+  }
+
+  .hero-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 48px;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--accent-blue); }
+
+  .hero p {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink-muted);
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+
+  /* Progress Bar */
+  .progress-section {
+    padding: 24px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .progress-bar {
+    width: 100%;
+    max-width: 500px;
+    height: 8px;
+    background: var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-blue);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-text {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 12px;
+  }
+
+  /* Chapters Grid */
+  .chapters-section {
+    padding: 24px 0 64px;
+  }
+
+  .chapters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .chapter-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .chapter-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-blue);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .chapter-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
+  }
+
+  .chapter-card:hover::before { transform: scaleX(1); }
+
+  .chapter-card.completed {
+    background: linear-gradient(135deg, var(--paper) 0%, rgba(37, 99, 235, 0.03) 100%);
+  }
+
+  .chapter-card.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--accent-blue);
+  }
+
+  .chapter-number {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+  }
+
+  .chapter-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .chapter-subtitle {
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .chapter-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    padding-top: 8px;
+    margin-top: auto;
+  }
+
+  /* Reset Button */
+  .reset-section {
+    padding: 24px 0 64px;
+    text-align: center;
+  }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  /* Footer */
+  .footer {
+    padding: 32px 0;
+    border-top: 2px solid var(--ink);
+    text-align: center;
+  }
+
+  .colophon {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 800px) {
+    .page { padding: 0 24px; }
+    .hero h1 { font-size: 36px; }
+    .chapters-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="brand">
+    <a href="index.html" class="wordmark"><em>Par</em>quet</a>
+    <span class="tagline">DP-800 Quizzes</span>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-kicker">SQL AI Developer Associate</span>
+  <h1>DP-<em>800</em> Practice</h1>
+  <p>Master AI-enabled database solutions across SQL Server, Azure SQL, and Fabric. 600 questions across 12 chapters.</p>
+</section>
+
+<section class="progress-section">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <p class="progress-text" id="progressText">0% complete</p>
+</section>
+
+<section class="chapters-section">
+  <div class="chapters-grid" id="chaptersGrid"></div>
+</section>
+
+<section class="reset-section">
+  <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+</section>
+
+<footer class="footer">
+  <div class="colophon">A study companion by Nasif Ishtiaque Islam.</div>
+</footer>
+
+</div>
+
+<script src="shared/dp800-core.js"></script>
+<script>
+function render() {
+  const progress = DP800.getOverallProgress();
+  const grid = document.getElementById('chaptersGrid');
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('progressText');
+
+  // Update progress bar
+  fill.style.width = progress.percent + '%';
+  text.textContent = `${progress.chaptersCompleted}/${progress.totalChapters} chapters complete (${progress.totalCorrect} correct)`;
+
+  // Render chapter cards
+  grid.innerHTML = DP800.META.map(ch => {
+    const isCompleted = DP800.load().chapters[ch.id]?.completed || false;
+    return `
+      <a href="${ch.href}" class="chapter-card ${isCompleted ? 'completed' : ''}">
+        <span class="chapter-number">Chapter ${ch.id}</span>
+        <h3 class="chapter-title">${ch.label}</h3>
+        <p class="chapter-subtitle">${ch.sub}</p>
+        <span class="chapter-link">${isCompleted ? 'Review' : 'Start'} →</span>
+      </a>
+    `;
+  }).join('');
+}
+
+function resetProgress() {
+  if (confirm('Reset all quiz progress? This cannot be undone.')) {
+    DP800.reset();
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
