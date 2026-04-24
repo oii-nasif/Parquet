@@ -1,10 +1,10 @@
-// DP-800: SQL AI Developer Associate — Interactive Quiz System
-// localStorage keys, chapter list, progress helpers
+// DP-800 — shared progress & data utilities
+// Uses localStorage for per-quiz attempts, scores, bookmarks.
 
-(function() {
-  const STORAGE_KEY = 'dp800_quiz_progress_v1';
+(function(global){
+  const STORAGE_KEY = 'dp800.v1';
+  const QUIZ_COUNT = 12;
 
-  // --- Chapter definitions -------------------------------------------------
   const QUIZ_META = [
     { id: 0,  label: 'Online Dumps',           sub: 'Mixed Practice',             href: 'quiz-dp800.html?q=0'  },
     { id: 1,  label: 'Database Objects',       sub: 'Tables, Indexes, Views',      href: 'quiz-dp800.html?q=1'  },
@@ -20,122 +20,109 @@
     { id: 11, label: 'Mock Exam',             sub: 'Comprehensive Review',        href: 'quiz-dp800.html?q=11' }
   ];
 
-  const CHAPTER_COUNT = QUIZ_META.length;
-  const QUESTIONS_PER_CHAPTER = 50;
-  const TOTAL_QUESTIONS = 600;
-
-  // --- Storage helpers ----------------------------------------------------
-  function load() {
+  function loadState(){
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return getDefaultState();
-      const stored = JSON.parse(raw);
-      // Merge with defaults to handle new chapters added
-      return { ...getDefaultState(), ...stored };
-    } catch (e) {
-      console.error('Error loading progress:', e);
-      return getDefaultState();
-    }
+      if(!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      return Object.assign(defaultState(), parsed);
+    } catch(e){ return defaultState(); }
+  }
+  function defaultState(){
+    return {
+      quizzes: {},   // { [id]: { attempts:[{date, correct, wrong, skipped, total, seconds}], best: {pct, date}, last: {...} } }
+      bookmarks: [], // [{ quizId, num, question }]
+      lastQuiz: null,
+      lastQuizAt: null,
+    };
+  }
+  function saveState(s){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){}
   }
 
-  function getDefaultState() {
-    const chapters = {};
-    for (let i = 0; i < CHAPTER_COUNT; i++) {
-      chapters[i] = { completed: false, correctCount: 0, bookmarked: [] };
-    }
-    return { chapters };
+  function recordAttempt(quizId, result){
+    const s = loadState();
+    const q = s.quizzes[quizId] || { attempts: [], best: null };
+    const entry = Object.assign({ date: Date.now() }, result);
+    q.attempts.push(entry);
+    if(q.attempts.length > 20) q.attempts = q.attempts.slice(-20);
+    const pct = entry.total ? Math.round(entry.correct/entry.total*100) : 0;
+    if(!q.best || pct > q.best.pct) q.best = { pct, date: entry.date };
+    q.last = entry;
+    s.quizzes[quizId] = q;
+    s.lastQuiz = quizId;
+    s.lastQuizAt = entry.date;
+    saveState(s);
+    return s;
   }
 
-  function save(data) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch (e) {
-      console.error('Error saving progress:', e);
-    }
+  function quizStats(quizId){
+    const s = loadState();
+    const q = s.quizzes[quizId];
+    if(!q) return { attempts: 0, best: null, last: null };
+    return { attempts: q.attempts.length, best: q.best, last: q.last };
   }
 
-  function reset() {
-    localStorage.removeItem(STORAGE_KEY);
-    location.reload();
+  function overallStats(){
+    const s = loadState();
+    let totalAttempts = 0, sumPct = 0, pctCount = 0, bestAnywhere = 0, quizzesAttempted = 0;
+    let totalCorrect = 0, totalAnswered = 0;
+    Object.values(s.quizzes).forEach(q => {
+      if(q.attempts.length) quizzesAttempted++;
+      totalAttempts += q.attempts.length;
+      q.attempts.forEach(a => {
+        if(a.total){ sumPct += Math.round(a.correct/a.total*100); pctCount++; totalCorrect += a.correct; totalAnswered += a.total; }
+      });
+      if(q.best && q.best.pct > bestAnywhere) bestAnywhere = q.best.pct;
+    });
+    return {
+      totalAttempts,
+      avgPct: pctCount ? Math.round(sumPct/pctCount) : 0,
+      bestPct: bestAnywhere,
+      quizzesAttempted,
+      quizzesTotal: QUIZ_COUNT,
+      totalCorrect,
+      totalAnswered,
+      bookmarks: s.bookmarks.length,
+    };
   }
 
-  // --- Public API ---------------------------------------------------------
-  window.DP800 = {
-    META: QUIZ_META,
-    CHAPTER_COUNT,
-    QUESTIONS_PER_CHAPTER,
-    TOTAL_QUESTIONS,
+  function toggleBookmark(quizId, num, question){
+    const s = loadState();
+    const idx = s.bookmarks.findIndex(b => b.quizId===quizId && b.num===num);
+    if(idx >= 0) s.bookmarks.splice(idx,1);
+    else s.bookmarks.push({ quizId, num, question });
+    saveState(s);
+    return idx < 0; // true if added
+  }
+  function isBookmarked(quizId, num){
+    const s = loadState();
+    return s.bookmarks.some(b => b.quizId===quizId && b.num===num);
+  }
 
-    // Progress operations
-    load,
-    save,
-    reset,
-
-    // Chapter helpers
-    getChapterLabel(id) { return QUIZ_META[id]?.label || `Chapter ${id}`; },
-    getChapterHref(id) { return QUIZ_META[id]?.href || `quiz-dp800.html?q=${id}`; },
-
-    // Stats helpers
-    getOverallProgress() {
-      const data = load();
-      let completed = 0;
-      let totalCorrect = 0;
-
-      for (let i = 0; i < CHAPTER_COUNT; i++) {
-        if (data.chapters[i]?.completed) completed++;
-        totalCorrect += data.chapters[i]?.correctCount || 0;
-      }
-
-      return {
-        chaptersCompleted: completed,
-        totalChapters: CHAPTER_COUNT,
-        percent: Math.round((completed / CHAPTER_COUNT) * 100),
-        totalCorrect
-      };
-    },
-
-    markChapterComplete(chapterId, correctCount) {
-      const data = load();
-      if (!data.chapters[chapterId]) data.chapters[chapterId] = {};
-      data.chapters[chapterId].completed = true;
-      data.chapters[chapterId].correctCount = correctCount;
-      save(data);
-    },
-
-    toggleBookmark(chapterId, questionNum) {
-      const data = load();
-      if (!data.chapters[chapterId]) data.chapters[chapterId] = { bookmarked: [] };
-      const bookmarks = data.chapters[chapterId].bookmarked || [];
-      const idx = bookmarks.indexOf(questionNum);
-      if (idx >= 0) {
-        bookmarks.splice(idx, 1);
-      } else {
-        bookmarks.push(questionNum);
-      }
-      data.chapters[chapterId].bookmarked = bookmarks;
-      save(data);
-      return bookmarks;
-    },
-
-    getBookmarks(chapterId) {
-      const data = load();
-      return data.chapters[chapterId]?.bookmarked || [];
-    },
-
-    getRecommendedChapter() {
-      const data = load();
-      // Return first incomplete chapter
-      for (let i = 1; i < CHAPTER_COUNT; i++) { // Skip chapter 0 (Online Dumps)
-        if (!data.chapters[i]?.completed) {
-          return i;
-        }
-      }
-      return 1; // Default to first real chapter
+  function recommendedNext(){
+    const s = loadState();
+    // Suggest the lowest-scored attempted quiz, or the next unattempted quiz.
+    let worst = null, worstPct = 101;
+    for(const q of QUIZ_META){
+      const st = s.quizzes[q.id];
+      if(st && st.best && st.best.pct < worstPct){ worstPct = st.best.pct; worst = q; }
     }
+    const unattempted = QUIZ_META.find(q => !s.quizzes[q.id] || !s.quizzes[q.id].attempts.length);
+    if(worst && worstPct < 80) return { quiz: worst, reason: 'retake', pct: worstPct };
+    if(unattempted) return { quiz: unattempted, reason: 'next' };
+    // fully studied — return the most recent
+    const recent = QUIZ_META.find(q => q.id === s.lastQuiz) || QUIZ_META[0];
+    return { quiz: recent, reason: 'review' };
+  }
+
+  function clearAll(){ localStorage.removeItem(STORAGE_KEY); }
+
+  global.DP800 = {
+    QUIZ_COUNT, QUIZ_META,
+    loadState, saveState, recordAttempt,
+    quizStats, overallStats,
+    toggleBookmark, isBookmarked,
+    recommendedNext, clearAll,
   };
-
-  // Export for landing page
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = window.DP800;
-  }
-})();
+})(window);
