@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DP-800 Quiz</title>
+<title>Parquet — Quiz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,9 +18,9 @@
     --ink-4: #938c7d;
     --rule: #c9c0ad;
     --rule-2: #d8d0bd;
-    --accent: oklch(0.55 0.12 250);
-    --accent-2: oklch(0.55 0.09 230);
-    --accent-soft: oklch(0.92 0.03 250);
+    --accent: oklch(0.48 0.09 40);
+    --accent-2: oklch(0.48 0.06 160);
+    --accent-soft: oklch(0.92 0.03 40);
     --correct: oklch(0.48 0.09 150);
     --correct-soft: oklch(0.94 0.05 150);
     --wrong: oklch(0.50 0.15 25);
@@ -109,7 +109,7 @@
   /* ---------- Container ---------- */
   .container { max-width: 880px; margin: 0 auto; padding: 32px 32px 80px; }
 
-  /* ---------- Topic header ---------- */
+  /* ---------- Topic header (topicwise mode) ---------- */
   .topic-header {
     margin: 36px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--ink);
     display: flex; justify-content: space-between; align-items: baseline;
@@ -172,6 +172,18 @@
   .opt-label.wrong-opt::after { content: '×'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--wrong); font-size: 24px; font-weight: 500; }
   .opt-label.missed-opt { border-color: var(--correct); border-style: dashed; opacity: 0.75; }
   .opt-label.missed-opt .letter { color: var(--correct); }
+
+  /* ---------- Match sections ---------- */
+  .match-section { padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: 8px; }
+  .match-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .match-item { font-family: var(--serif); font-size: 15px; color: var(--ink-2); padding: 3px 0; }
+  .match-item::before { content: '—'; color: var(--ink-4); margin-right: 8px; }
+  .match-answer { background: var(--correct-soft); border: 1px solid var(--correct); padding: 14px 18px; margin-top: 10px; display: none; }
+  .match-answer.show { display: block; }
+  .match-answer .match-label { color: var(--correct); }
+  .match-answer .pair { font-family: var(--serif); font-size: 15px; color: var(--ink); padding: 3px 0; }
+  .match-answer .pair strong { font-weight: 500; }
+  .match-answer .pair .arr { color: var(--correct); padding: 0 10px; font-family: var(--mono); }
 
   /* ---------- Result + explanation ---------- */
   .q-result { display: none; margin-top: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; }
@@ -236,8 +248,6 @@
   <div class="crumbs">
     <a href="index.html">Library</a>
     <span class="sep">/</span>
-    <a href="landing-page-dp-800.html">DP-800</a>
-    <span class="sep">/</span>
     <span class="cur" id="crumbCur">Chapter —</span>
   </div>
   <div class="timer">
@@ -273,7 +283,7 @@
 <section class="qhead">
   <div class="eyebrow" id="qEyebrow">Chapter — · 50 questions</div>
   <h1 id="qTitle"><em>Loading</em>…</h1>
-  <p class="deck" id="qDeck">A fifty-question set from the DP-800 pool. Flag what you'd like to revisit; your progress is stored locally.</p>
+  <p class="deck" id="qDeck">A fifty-question set from the DP-700 pool. Flag what you'd like to revisit; your progress is stored locally.</p>
 </section>
 
 <main class="container" id="quizContainer"></main>
@@ -305,8 +315,8 @@ const urlParams = new URLSearchParams(location.search);
 const quizId = urlParams.get('q') || '0';
 const isRandom = quizId === 'random';
 
-const DP = window.DP800;
-const meta = isRandom ? { id: 'random', label: 'The Random Fifty', sub: 'A mixed mock across all chapters' } : (DP.META.find(q => String(q.id) === quizId) || DP.META[0]);
+const FP = window.DP800;
+const meta = isRandom ? { id: 'random', label: 'The Random Fifty', sub: 'A mixed mock across all chapters' } : (DP.QUIZ_META.find(q => String(q.id) === quizId) || DP.QUIZ_META[0]);
 
 document.getElementById('qTitle').innerHTML = meta.id===0 ? '<em>The Online Dumps</em>' : meta.id==='random' ? 'The <em>Random Fifty</em>' : 'Chapter ' + toRoman(meta.id) + ' · <em>' + meta.label + '</em>';
 document.getElementById('qEyebrow').textContent = (meta.id==='random' ? 'Mixed pool' : 'Chapter ' + (meta.id)) + ' · 50 questions · DP-800';
@@ -326,19 +336,23 @@ function toRoman(n){
 // Load the appropriate question file(s) then boot
 function loadScript(src){ return new Promise((res, rej) => { const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
 function grabQuestions(){
+  // questions_N.js declares `const QUESTIONS = [...]` at script top-level — these
+  // become globals but are NOT properties of window. Read via eval in global scope.
   try { return (0, eval)('typeof QUESTIONS !== "undefined" ? QUESTIONS : []'); }
   catch(e){ return []; }
 }
 
 (async function boot(){
   if(isRandom){
+    // pull 50 questions at random across all 12 files
     let pool = [];
-    for(let i = 0; i < DP.CHAPTER_COUNT; i++){
+    for(let i = 0; i < DP.QUIZ_COUNT; i++){
       try {
         await loadScript(`questions-dp800/questions_${i}.js`);
         pool = pool.concat(grabQuestions().map(q => Object.assign({_src:i}, q)));
       } catch(e){}
     }
+    // shuffle & take 50
     for(let i = pool.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
     window.QUESTIONS = pool.slice(0, 50).map((q, i) => Object.assign({}, q, { num: i+1 }));
   } else {
@@ -350,7 +364,7 @@ function grabQuestions(){
 
 // ---------- Quiz state ----------
 let seconds = 0, timerInterval = null, mode = 'shuffle', ordered = [], submitted = false;
-const answered = new Set();
+const answered = new Set(); // question indices that have any selection
 
 function startTimer(){ if(timerInterval) return; timerInterval = setInterval(tick, 1000); document.getElementById('timerDot').classList.remove('paused'); }
 function tick(){ seconds++; document.getElementById('timerVal').textContent = String(Math.floor(seconds/60)).padStart(2,'0') + ':' + String(seconds%60).padStart(2,'0'); }
@@ -359,7 +373,7 @@ function resetTimer(){ seconds=0; document.getElementById('timerVal').textConten
 
 function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
 function escHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function getBadge(q){ if(Array.isArray(q.answer)) return 'Multi-select'; if(q.type==='match') return 'Drag & drop'; return 'Single answer'; }
+function getBadge(q){ if(Array.isArray(q.answer)) return 'Multi-select'; if(q.type==='match') return 'Drag & drop'; if(q.type==='order') return 'Reorder'; if(q.type==='hotarea') return 'Hot area'; if(q.type==='scenario') return 'Scenario'; return 'Single answer'; }
 
 function initQuiz(){
   document.getElementById('modeShuffle').addEventListener('click', () => setMode('shuffle'));
@@ -401,20 +415,31 @@ function render(){
       return;
     }
     const q = item, gi = qIdx; qIdx++;
-    const isMulti = Array.isArray(q.answer);
+    const isMulti = Array.isArray(q.answer), isMatch = q.type === 'match';
     const badge = getBadge(q);
     const srcTag = isRandom ? ` · Ch. ${toRoman(q._src)}` : '';
-    const flagged = DP.getBookmarks(isRandom ? q._src : meta.id).includes(q.num);
+    const flagged = DP.isBookmarked(isRandom ? q._src : meta.id, q.num);
 
-    let body = `<div class="options">`;
-    (q.options||[]).forEach((opt, oi) => {
-      const letter = opt.charAt(0);
-      const optText = opt.length > 3 && opt.charAt(1) === '.' ? opt.substring(3).trim() : opt;
-      body += `<label class="opt-label" data-letter="${letter}"><span class="letter">${letter}</span><span class="opt-text">${escHtml(optText)}</span><span class="key-hint">${oi+1}</span><input type="${isMulti?'checkbox':'radio'}" name="q${gi}" value="${letter}"/></label>`;
-    });
-    body += `</div>`;
-
-    const ansDisp = isMulti ? q.answer.join(', ') : q.answer;
+    let body = '';
+    if(isMatch){
+      body = `<div class="match-section"><div class="match-label">Items</div>`;
+      (q.left_items||[]).forEach(it => body += `<div class="match-item">${escHtml(it)}</div>`);
+      body += `</div><div class="match-section"><div class="match-label">Categories</div>`;
+      (q.right_items||[]).forEach(it => body += `<div class="match-item">${escHtml(it)}</div>`);
+      body += `</div><div class="match-answer" id="matchAns${gi}"><div class="match-label">Correct Matches</div>`;
+      const m = q.matches||{};
+      Object.keys(m).forEach(k => body += `<div class="pair"><strong>${escHtml(k)}</strong> <span class="arr">→</span> ${escHtml(m[k])}</div>`);
+      body += `</div>`;
+    } else {
+      body = `<div class="options">`;
+      (q.options||[]).forEach((opt, oi) => {
+        const letter = opt.charAt(0);
+        const optText = opt.length > 3 && opt.charAt(1) === '.' ? opt.substring(3).trim() : opt;
+        body += `<label class="opt-label" data-letter="${letter}"><span class="letter">${letter}</span><span class="opt-text">${escHtml(optText)}</span><span class="key-hint">${oi+1}</span><input type="${isMulti?'checkbox':'radio'}" name="q${gi}" value="${letter}"/></label>`;
+      });
+      body += `</div>`;
+    }
+    const ansDisp = isMatch ? 'See matches above' : (isMulti ? q.answer.join(', ') : q.answer);
     c.innerHTML += `
       <div class="qcard" id="card${gi}" data-qidx="${gi}" data-quiz="${isRandom ? q._src : meta.id}" data-num="${q.num}">
         <div class="q-header">
@@ -463,7 +488,9 @@ function render(){
       const card = btn.closest('.qcard');
       const qId = parseInt(card.dataset.quiz);
       const num = parseInt(card.dataset.num);
-      const added = DP.toggleBookmark(qId, num);
+      const qIdx = parseInt(card.dataset.qidx);
+      const q = ordered.filter(it => !it._topicHeader)[qIdx];
+      const added = DP.toggleBookmark(qId, num, q.question);
       btn.classList.toggle('flagged', added);
       btn.querySelector('span:last-child').textContent = added ? 'Flagged' : 'Flag';
       btn.querySelector('svg').setAttribute('fill', added ? 'currentColor' : 'none');
@@ -497,7 +524,9 @@ function updateProgress(){
   const pct = total ? Math.round(answered.size/total*100) : 0;
   document.getElementById('trackBar').style.width = pct + '%';
   document.getElementById('progressLabel').textContent = `${answered.size} of ${total} answered`;
+  // Running score tally visible only if anything answered
   document.getElementById('runningScore').style.display = submitted ? 'flex' : 'none';
+  // Update dots
   document.querySelectorAll('.qdot').forEach(d => {
     const idx = parseInt(d.dataset.qidx);
     d.classList.toggle('answered', answered.has(idx));
@@ -505,7 +534,7 @@ function updateProgress(){
     if(card){
       const qId = parseInt(card.dataset.quiz);
       const num = parseInt(card.dataset.num);
-      d.classList.toggle('flagged', DP.getBookmarks(qId).includes(num));
+      d.classList.toggle('flagged', DP.isBookmarked(qId, num));
     }
   });
 }
@@ -521,35 +550,44 @@ function submitAll(){
     if(item._topicHeader) return;
     const q = item, gi = qIdx; qIdx++;
     const card = document.getElementById('card'+gi), result = document.getElementById('result'+gi), exp = document.getElementById('exp'+gi);
-    const isMulti = Array.isArray(q.answer);
+    const isMulti = Array.isArray(q.answer), isMatch = q.type === 'match';
     const topic = q.subtopic || 'General';
     if(!topicStats[topic]) topicStats[topic] = { c:0, w:0, s:0, total:0 };
     topicStats[topic].total++;
 
-    const correctSet = new Set(isMulti ? q.answer : [q.answer]);
-    const selected = new Set();
-    card.querySelectorAll('input[name="q'+gi+'"]').forEach(i => { if(i.checked) selected.add(i.value); });
-    card.querySelectorAll('.opt-label').forEach(l => {
-      const lt = l.dataset.letter, ic = correctSet.has(lt), is = selected.has(lt);
-      l.classList.remove('selected');
-      if(ic && is) l.classList.add('correct-opt');
-      else if(is && !ic) l.classList.add('wrong-opt');
-      else if(ic && !is) l.classList.add('missed-opt');
-    });
-    const dot = document.querySelector(`.qdot[data-qidx="${gi}"]`);
-    if(selected.size === 0){
+    if(isMatch){
+      const ma = document.getElementById('matchAns'+gi); if(ma) ma.classList.add('show');
       skipped++; topicStats[topic].s++;
-      result.textContent = '→ Skipped'; result.className = 'q-result show skip';
+      result.textContent = '→ Review matches above'; result.className = 'q-result show skip';
       card.classList.add('skipped-card');
-      if(dot) dot.classList.add('answered');
+      const dot = document.querySelector(`.qdot[data-qidx="${gi}"]`); if(dot) dot.classList.add('answered');
     } else {
-      const ok = correctSet.size === selected.size && [...correctSet].every(v => selected.has(v));
-      if(ok){ correct++; topicStats[topic].c++; result.textContent='→ Correct'; result.className='q-result show pass'; card.classList.add('correct-card'); if(dot) dot.classList.add('correct'); }
-      else { wrong++; topicStats[topic].w++; result.textContent='→ Wrong'; result.className='q-result show fail'; card.classList.add('wrong-card'); if(dot) dot.classList.add('wrong'); }
+      const correctSet = new Set(isMulti ? q.answer : [q.answer]);
+      const selected = new Set();
+      card.querySelectorAll('input[name="q'+gi+'"]').forEach(i => { if(i.checked) selected.add(i.value); });
+      card.querySelectorAll('.opt-label').forEach(l => {
+        const lt = l.dataset.letter, ic = correctSet.has(lt), is = selected.has(lt);
+        l.classList.remove('selected');
+        if(ic && is) l.classList.add('correct-opt');
+        else if(is && !ic) l.classList.add('wrong-opt');
+        else if(ic && !is) l.classList.add('missed-opt');
+      });
+      const dot = document.querySelector(`.qdot[data-qidx="${gi}"]`);
+      if(selected.size === 0){
+        skipped++; topicStats[topic].s++;
+        result.textContent = '→ Skipped'; result.className = 'q-result show skip';
+        card.classList.add('skipped-card');
+        if(dot) dot.classList.add('answered');
+      } else {
+        const ok = correctSet.size === selected.size && [...correctSet].every(v => selected.has(v));
+        if(ok){ correct++; topicStats[topic].c++; result.textContent='→ Correct'; result.className='q-result show pass'; card.classList.add('correct-card'); if(dot) dot.classList.add('correct'); }
+        else { wrong++; topicStats[topic].w++; result.textContent='→ Wrong'; result.className='q-result show fail'; card.classList.add('wrong-card'); if(dot) dot.classList.add('wrong'); }
+      }
     }
     exp.classList.add('show');
   });
 
+  // Running score
   document.getElementById('rsC').textContent = correct;
   document.getElementById('rsW').textContent = wrong;
   document.getElementById('rsS').textContent = skipped;
@@ -558,6 +596,7 @@ function submitAll(){
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('retryBtn').classList.add('show');
 
+  // Scorecard
   const total = correct + wrong + skipped;
   const pct = total ? Math.round(correct/total*100) : 0;
   const sc = document.getElementById('scorecard');
@@ -570,13 +609,14 @@ function submitAll(){
   document.getElementById('scStamp').textContent = timeTaken;
   let verdict = '';
   if(pct >= 85) verdict = `Mastery-level. Mark this chapter and revisit in two weeks to keep it fresh — ${pct}% is the band you want on exam day.`;
-  else if(pct >= 70) verdict = `A passing run. Look closely at the ${wrong} wrong answers below — most DP-800 failures come from the margins.`;
+  else if(pct >= 70) verdict = `A passing run. Look closely at the ${wrong} wrong answers below — most DP-700 failures come from the margins.`;
   else if(pct >= 50) verdict = `Honest territory. Revisit the explanations, then come back to this set in a day or two. Don't move on yet.`;
   else verdict = `This one needs a second reading before another attempt. Work through the explanations slowly — no timer.`;
   document.getElementById('scVerdict').textContent = verdict;
   sc.parentNode.insertBefore(sc, document.getElementById('quizContainer'));
   sc.classList.add('show');
 
+  // Topic scores
   if(mode === 'topicwise'){
     ordered.forEach((item, idx) => {
       if(!item._topicHeader) return;
@@ -588,8 +628,9 @@ function submitAll(){
     });
   }
 
+  // Save
   if(meta.id !== 'random'){
-    DP.markChapterComplete(meta.id, correct);
+    DP.recordAttempt(meta.id, { correct, wrong, skipped, total, seconds });
   }
 
   if(timerInterval){ clearInterval(timerInterval); timerInterval=null; document.getElementById('timerDot').classList.add('paused'); }
@@ -605,6 +646,7 @@ function retry(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+// ---------- Keyboard shortcuts ----------
 function setupKeyboard(){
   let keyhintTimer;
   const hint = document.getElementById('keyhint');
@@ -612,6 +654,8 @@ function setupKeyboard(){
     if(submitted) return;
     if(e.target.tagName === 'INPUT' && e.target.type === 'text') return;
     const key = e.key;
+
+    // 1-9 select current question's option
     if(/^[1-9]$/.test(key)){
       const card = currentVisibleCard();
       if(!card) return;
@@ -629,6 +673,7 @@ function setupKeyboard(){
       hint.classList.add('show'); clearTimeout(keyhintTimer); keyhintTimer = setTimeout(() => hint.classList.remove('show'), 2500);
     }
   });
+  // Show hint once at start
   setTimeout(() => { hint.classList.add('show'); setTimeout(() => hint.classList.remove('show'), 3000); }, 1200);
 
   function flashHint(msg){
