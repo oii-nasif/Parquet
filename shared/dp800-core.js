@@ -3,7 +3,7 @@
 
 (function(global){
   const STORAGE_KEY = 'dp800.v1';
-  const QUIZ_COUNT = 12;
+  const QUIZ_COUNT = 14;
 
   const QUIZ_META = [
     { id: 0,  label: 'Online Dumps',           sub: 'Mixed Practice',             href: 'quiz-dp800.html?q=0'  },
@@ -17,7 +17,9 @@
     { id: 8,  label: 'Azure Integration',      sub: 'Functions, Event Hubs, etc.',  href: 'quiz-dp800.html?q=8'  },
     { id: 9,  label: 'Models & Embeddings',    sub: 'Vector Search, AI',           href: 'quiz-dp800.html?q=9'  },
     { id: 10, label: 'Intelligent Search',     sub: 'Full-Text, Semantic Search',  href: 'quiz-dp800.html?q=10' },
-    { id: 11, label: 'Mock Exam',             sub: 'Comprehensive Review',        href: 'quiz-dp800.html?q=11' }
+    { id: 11, label: 'Mock Exam',             sub: 'Comprehensive Review',        href: 'quiz-dp800.html?q=11' },
+    { id: 12, label: 'Specialized Features',   sub: 'Graph, Spatial, Temporal, Ledger', href: 'quiz-dp800.html?q=12' },
+    { id: 13, label: 'Mega Mock Exam',        sub: 'All Topics Review',          href: 'quiz-dp800.html?q=13' }
   ];
 
   function loadState(){

@@ -640,18 +640,30 @@
   .reset-btn {
     font-family: var(--mono);
     font-size: 10px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--ink-faint);
-    background: none;
-    border: none;
+    color: var(--ink-muted);
+    background: var(--paper);
+    border: 1px solid var(--rule);
     cursor: pointer;
-    padding: 8px 0;
-    transition: color 0.2s ease;
+    padding: 8px 16px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .reset-btn:hover {
-    color: var(--accent);
+    color: var(--paper);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .reset-btn:hover::before {
+    content: '↺';
+    font-family: var(--serif);
+    font-size: 14px;
   }
 
   /* ========== Animations ========== */
