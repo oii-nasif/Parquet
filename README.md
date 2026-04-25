@@ -8,9 +8,9 @@ Free study companions for Microsoft Fabric certifications.
 
 | Exam | Certification | Type |
 |------|---------------|------|
-| DP-600 | Fabric Analytics Engineer Associate | Study Guide |
+| DP-600 | Fabric Analytics Engineer Associate | Interactive Quizzes + Study Guide |
 | DP-700 | Fabric Data Engineer Associate | Interactive Quizzes + Study Guide |
-| DP-800 | SQL AI Developer Associate | Study Guide |
+| DP-800 | SQL AI Developer Associate | Interactive Quizzes + Study Guide |
 
 ## DP-700 Interactive Features
 
