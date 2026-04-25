@@ -12,14 +12,15 @@ Free study companions for Microsoft Fabric certifications.
 | DP-700 | Fabric Data Engineer Associate | Interactive Quizzes + Study Guide |
 | DP-800 | SQL AI Developer Associate | Interactive Quizzes + Study Guide |
 
-## DP-700 Interactive Features
+## Interactive Features
 
-- 700+ annotated questions across 14 chapters
+- 2100+ practice questions across all three exams (700+ per exam)
+- 14 chapters per exam covering all exam objectives
 - Progress tracking with localStorage
 - Smart recommendations for next chapter
 - Bookmark tricky questions for review
-- Random Fifty mock exam mode
 - Topic map for visualizing coverage
+- Mock exam mode with 50 random questions
 
 ## Live Site
 
