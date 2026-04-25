@@ -6,7 +6,12 @@
       "Bash(dir:*)",
       "Bash(find:*)",
       "Bash(git pull:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(for i in {0..13})",
+      "Bash(do echo \"=== File $i ===\")",
+      "Bash(node:*)",
+      "Bash(done)",
+      "Bash(python3:*)"
     ]
   }
 }
